@@ -15,7 +15,7 @@ const useSignin = () => {
     mutationFn: (values: LoginRequest) => loginUser(values),
     onSuccess: (data: User) => {
       setUser(data);
-      router.push("/"); // Use router.push instead of navigate
+      router.push("/home/dashboard"); // Use router.push instead of navigate
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {

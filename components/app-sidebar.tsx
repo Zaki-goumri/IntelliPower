@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Thermometer,
@@ -14,8 +14,9 @@ import {
   Bell,
   HelpCircle,
   Server,
-} from "lucide-react"
-import Logo from "@/components/logo"
+  MapPin,
+} from "lucide-react";
+import Logo from "@/components/logo";
 import {
   Sidebar,
   SidebarContent,
@@ -25,64 +26,69 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 interface NavItem {
-  title: string
-  href: string
-  icon: React.ReactNode
+  title: string;
+  href: string;
+  icon: React.ReactNode;
 }
 
 const navItems: NavItem[] = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/home/dashboard",
     icon: <LayoutDashboard className="h-5 w-5" />,
   },
   {
     title: "Temperature Control",
-    href: "/temperature",
+    href: "/home/temperature",
     icon: <Thermometer className="h-5 w-5" />,
   },
   {
     title: "Security",
-    href: "/security",
+    href: "/home/security",
     icon: <Shield className="h-5 w-5" />,
   },
   {
     title: "AI Analytics",
-    href: "/analytics",
+    href: "/home/analytics",
     icon: <BrainCircuit className="h-5 w-5" />,
   },
   {
     title: "Data Center",
-    href: "/datacenter",
+    href: "/home/datacenter",
     icon: <Server className="h-5 w-5" />,
   },
   {
+    title: "Map",
+    href: "/home/map",
+    icon: <MapPin className="h-5 w-5" />,
+  },
+  {
     title: "User Management",
-    href: "/users",
+    href: "/home/users",
     icon: <Users className="h-5 w-5" />,
   },
   {
     title: "Notifications",
-    href: "/notifications",
+    href: "/home/notifications",
     icon: <Bell className="h-5 w-5" />,
   },
   {
     title: "Settings",
-    href: "/settings",
+    href: "/home/settings",
     icon: <Settings className="h-5 w-5" />,
   },
   {
     title: "Help & Support",
-    href: "/help",
+    href: "/home/help",
     icon: <HelpCircle className="h-5 w-5" />,
   },
-]
+];
 
 export function AppSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Sidebar>
@@ -120,5 +126,5 @@ export function AppSidebar() {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

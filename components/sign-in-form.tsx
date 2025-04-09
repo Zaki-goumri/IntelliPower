@@ -166,10 +166,10 @@ export default function SignInForm() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                <button type="submit" className="w-full bg-purple-900">
+                <Button type="submit" className="w-full bg-purple-900">
                   <LogIn className="h-4 w-4 mr-2" />
                   Sign In
-                </button>
+                </Button>
               </motion.div>
             </form>
           </Form>

@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import {useUserStore } from "@/store/userStore"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -32,12 +33,12 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/dashboard-test/dashboard",
     icon: <LayoutDashboard className="h-5 w-5" />,
   },
   {
     title: "Temperature Control",
-    href: "/temperature",
+    href: "/dashboard-test/temperature",
     icon: <Thermometer className="h-5 w-5" />,
   },
   {
@@ -81,6 +82,10 @@ export default function Sidebar() {
   const pathname = usePathname()
   const isMobile = useMobile()
   const [isOpen, setIsOpen] = useState(false)
+  
+  
+  const user = useUserStore((state) => state.user);
+
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
@@ -127,8 +132,8 @@ export default function Sidebar() {
               AS
             </div>
             <div>
-              <p className="text-sm font-medium">Admin User</p>
-              <p className="text-xs text-muted-foreground">admin@example.com</p>
+              <p className="text-sm font-medium">{ user?.name }</p>
+              <p className="text-xs text-muted-foreground">{ user?.email }</p>
             </div>
           </div>
         </div>
