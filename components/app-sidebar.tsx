@@ -27,6 +27,7 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useUserStore } from "@/store/userStore";
 
 interface NavItem {
   title: string;
@@ -89,6 +90,9 @@ const navItems: NavItem[] = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  
+  const user = useUserStore((state) => state.user);
+
 
   return (
     <Sidebar>
@@ -118,8 +122,8 @@ export function AppSidebar() {
               AS
             </div>
             <div>
-              <p className="text-sm font-medium">Admin User</p>
-              <p className="text-xs text-muted-foreground">admin@example.com</p>
+              <p className="text-sm font-medium">{ user?.name || "User Name" }</p>
+              <p className="text-xs text-muted-foreground">{ user?.email || "user@example.com" }</p>
             </div>
           </div>
         </div>

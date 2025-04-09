@@ -8,14 +8,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 const useSignin = () => {
-  const setUser = useUserStore((state) => state.setUser);
-  const router = useRouter(); // Use proper Next.js router
+  const setUser = useUserStore((state) => state.login);
+  const router = useRouter();
 
   return useMutation<User, unknown, LoginRequest>({
     mutationFn: (values: LoginRequest) => loginUser(values),
     onSuccess: (data: User) => {
       setUser(data);
-      router.push("/home/dashboard"); // Use router.push instead of navigate
+      router.push("/home/dashboard");
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {

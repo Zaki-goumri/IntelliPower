@@ -1,16 +1,27 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { User } from "../app/(auht)/sign-in/signin.types";
 
-interface UserStore {
+type UserStore = {
   user: User | null;
-  setUser: (user: User | null) => void;
-}
+  login: (userData: User) => void;
+  logout: () => void;
+};
 
-export const useUserStore = create<UserStore>((set) => ({
-  user: null,
-  setUser: (user) => {
-    console.log("Setting user:", user);
-    set({ user });
-    console.log("Updated state:", useUserStore.getState()); // Log the updated state
-  },
-}));
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (userData) => set({ user: userData }),
+      logout: () => set({ user: null }),
+    }),
+    {
+      name: "user-storage",
+      storage: createJSONStorage(() => localStorage),
+      migrate: (persistedState, version) => {
+        if (version !== 0) return persistedState;
+        return persistedState as UserStore;
+      },
+    },
+  ),
+);

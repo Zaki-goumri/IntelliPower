@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 const useSignup = () => {
-  const setUser = useUserStore((state) => state.setUser);
+  const setUser = useUserStore((state) => state.login);
   const navigate = useRouter();
 
   return useMutation({
