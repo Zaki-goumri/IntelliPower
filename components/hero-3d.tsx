@@ -1,94 +1,148 @@
-"use client"
+// PurpleEarth.jsx
+import { useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { BlendFunction } from 'postprocessing'
+import * as THREE from 'three'
 
-import { useRef } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { Environment, PresentationControls, Stars } from "@react-three/drei"
-import { BackSide } from "three"
+// Inner Earth model component
+const PurpleEarthModel = () => {
+  const earthRef = useRef()
+  const continentsRef = useRef()
+  const reliefRef = useRef()
 
-function Earth() {
-  const earthRef = useRef(null)
-  const atmosphereRef = useRef(null)
-
-  useFrame((state, delta) => {
+  // Handle rotation animation
+  useFrame(({ mouse, viewport }) => {
+    // Auto rotation
     if (earthRef.current) {
-      earthRef.current.rotation.y += delta * 0.1
+      earthRef.current.rotation.y += 0.001
     }
-    if (atmosphereRef.current) {
-      atmosphereRef.current.rotation.y += delta * 0.05
+
+    if (continentsRef.current) {
+      continentsRef.current.rotation.y += 0.001
+    }
+
+    if (reliefRef.current) {
+      reliefRef.current.rotation.y += 0.001
+    }
+
+    // Mouse rotation control
+    const mouseX = (mouse.x * viewport.width) / viewport.width
+    const mouseY = (mouse.y * viewport.height) / viewport.height
+
+    const targetRotationY = mouseX * 0.5
+    const targetRotationX = mouseY * 0.3
+
+    // Apply rotation to all layers
+    if (earthRef.current) {
+      earthRef.current.rotation.y = targetRotationY
+      earthRef.current.rotation.x = targetRotationX
+    }
+
+    if (continentsRef.current) {
+      continentsRef.current.rotation.y = targetRotationY
+      continentsRef.current.rotation.x = targetRotationX
+    }
+
+    if (reliefRef.current) {
+      reliefRef.current.rotation.y = targetRotationY
+      reliefRef.current.rotation.x = targetRotationX
     }
   })
 
+  const EARTH_RADIUS = 1
+
   return (
-    <group>
-      {/* Earth sphere */}
+    <>
+      {/* Main Earth sphere */}
       <mesh ref={earthRef}>
-        <sphereGeometry args={[2, 64, 64]} />
-        <meshStandardMaterial
-          color="#6b21a8"
-          metalness={0.4}
-          roughness={0.7}
-          emissive="#3b0764"
+        <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
+        <meshPhongMaterial 
+          color="#ffffff"
+          specular="#666666"
+          shininess={25}
+          emissive="#330066"
           emissiveIntensity={0.2}
         />
+      </mesh>
 
-        {/* Continent details */}
-        <mesh>
-          <sphereGeometry args={[2.01, 64, 64]} />
-          <meshStandardMaterial
-            color="#9333ea"
-            metalness={0.8}
-            roughness={0.3}
-            transparent
-            opacity={0.6}
-            depthWrite={false}
-          />
-        </mesh>
+      {/* Continents layer */}
+      <mesh ref={continentsRef}>
+        <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
+        <meshBasicMaterial
+          color="#8a4fff"
+          transparent={true}
+          opacity={0.7}
+        />
+      </mesh>
+
+      {/* Relief wireframe layer */}
+      <mesh ref={reliefRef}>
+        <sphereGeometry args={[EARTH_RADIUS, 32, 32]} />
+        <meshStandardMaterial
+          color="#b088ff"
+          transparent={true}
+          opacity={0.4}
+          wireframe={true}
+        />
       </mesh>
 
       {/* Atmosphere glow */}
-      <mesh ref={atmosphereRef}>
-        <sphereGeometry args={[2.2, 64, 64]} />
-        <meshStandardMaterial color="#a855f7" transparent opacity={0.1} side={BackSide} />
-      </mesh>
-
-      {/* Outer glow */}
       <mesh>
-        <sphereGeometry args={[2.5, 32, 32]} />
-        <meshStandardMaterial color="#c084fc" transparent opacity={0.05} side={BackSide} />
+        <sphereGeometry args={[EARTH_RADIUS * 1.016, 64, 64]} />
+        <meshBasicMaterial
+          color="#9040ff"
+          transparent={true}
+          opacity={0.15}
+          side={THREE.BackSide}
+        />
       </mesh>
 
-      {/* Orbital ring */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[3.5, 0.08, 16, 100]} />
-        <meshStandardMaterial color="#a855f7" emissive="#a855f7" emissiveIntensity={0.5} transparent opacity={0.7} />
+      {/* Subtle glow effect */}
+      <mesh>
+        <sphereGeometry args={[EARTH_RADIUS * 1.01, 64, 64]} />
+        <meshBasicMaterial
+          color="#a364ff"
+          transparent={true}
+          opacity={0.1}
+        />
       </mesh>
-    </group>
+
+      {/* Lights */}
+      <ambientLight intensity={0.8} color="#555555" />
+      <directionalLight position={[5, 3, 5]} intensity={1} />
+      <pointLight position={[-2, 1, 1]} intensity={3} color="#9933ff" distance={10} />
+    </>
   )
 }
 
-export default function Hero3D() {
+// Main component with Canvas
+const PurpleEarth = () => {
   return (
-    <div className="w-full h-[400px] md:h-[500px]">
-      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-        <color attach="background" args={["transparent"]} />
-        <ambientLight intensity={0.3} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={0.8} castShadow />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#c084fc" />
+    <div className="w-full h-screen">
+      <Canvas camera={{ position: [0, 0, 2.5], fov: 75 }}>
+        <PurpleEarthModel />
 
-        <PresentationControls
-          global
-          rotation={[0, 0, 0]}
-          polar={[-Math.PI / 4, Math.PI / 4]}
-          azimuth={[-Math.PI / 4, Math.PI / 4]}
-          config={{ mass: 2, tension: 400 }}
-          snap={{ mass: 4, tension: 400 }}
-        >
-          <Earth />
-        </PresentationControls>
+        <EffectComposer>
+          <Bloom 
+            intensity={0.5}
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.9}
+            blendFunction={BlendFunction.SCREEN}
+          />
+        </EffectComposer>
 
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        <Environment preset="city" />
+        <OrbitControls 
+          enablePan={false}
+          enableZoom={false}
+          minDistance={1.5}
+          maxDistance={4}
+          enableRotate={false} // Disable orbit controls rotation since we're using mouse control
+        />
       </Canvas>
     </div>
   )
 }
+
+export default PurpleEarth

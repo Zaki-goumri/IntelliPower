@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Logo from "@/components/logo"
 import { Zap, Lock, BrainCircuit, ArrowRight, Server } from "lucide-react"
-import Hero3D from "@/components/hero-3d"
+import Earth from "@/components/hero-3d"
 import { motion, useInView, useAnimation } from "framer-motion"
 
 // Animated component wrapper
@@ -93,8 +93,8 @@ export default function LandingPage() {
       </motion.header>
 
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col justify-center py-12 md:py-24 lg:py-32 bg-gradient-to-br from-purple-950/30 to-background dark:from-purple-950/50 dark:to-background overflow-hidden">
-        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <section className="flex-1 flex flex-col justify-center py-12 md:py-24 lg:py-10 bg-gradient-to-br from-purple-950/30 to-background dark:from-purple-950/50 dark:to-background overflow-hidden">
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center ">
           <AnimatedSection>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
               Intelligent Power & Security System
@@ -120,8 +120,8 @@ export default function LandingPage() {
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
-            <div className="hidden md:block">
-               <Hero3D />  
+            <div className="hidden md:block ">
+               <Earth />  
             </div>
           </AnimatedSection>
         </div>
