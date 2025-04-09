@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import Logo from "@/components/logo"
-import { Zap, Lock, BrainCircuit, ArrowRight, Server } from "lucide-react"
-import Earth from "@/components/hero-3d"
-import { motion, useInView, useAnimation } from "framer-motion"
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import Logo from "@/components/logo";
+import { Zap, Lock, BrainCircuit, ArrowRight, Server } from "lucide-react";
+import Earth from "@/components/hero-3d";
+import { motion, useInView, useAnimation } from "framer-motion";
 
 // Animated component wrapper
 const AnimatedSection = ({ children, delay = 0 }) => {
-  const controls = useAnimation()
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   useEffect(() => {
     if (isInView) {
-      controls.start("visible")
+      controls.start("visible");
     }
-  }, [controls, isInView])
+  }, [controls, isInView]);
 
   return (
     <motion.div
@@ -40,8 +40,8 @@ const AnimatedSection = ({ children, delay = 0 }) => {
     >
       {children}
     </motion.div>
-  )
-}
+  );
+};
 
 // Animated feature card
 const FeatureCard = ({ icon, title, description, delay = 0 }) => {
@@ -58,16 +58,19 @@ const FeatureCard = ({ icon, title, description, delay = 0 }) => {
       }}
       whileHover={{
         y: -5,
-        boxShadow: "0 10px 25px -5px rgba(107, 33, 168, 0.2), 0 8px 10px -6px rgba(107, 33, 168, 0.2)",
+        boxShadow:
+          "0 10px 25px -5px rgba(107, 33, 168, 0.2), 0 8px 10px -6px rgba(107, 33, 168, 0.2)",
         transition: { duration: 0.2 },
       }}
     >
-      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">{icon}</div>
+      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+        {icon}
+      </div>
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-muted-foreground">{description}</p>
     </motion.div>
-  )
-}
+  );
+};
 
 export default function LandingPage() {
   return (
@@ -100,11 +103,15 @@ export default function LandingPage() {
               Intelligent Power & Security System
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Advanced monitoring and control system for processing rooms and call centers. Optimize energy usage,
-              enhance security, and improve operational efficiency.
+              Advanced monitoring and control system for processing rooms and
+              call centers. Optimize energy usage, enhance security, and improve
+              operational efficiency.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button size="lg" asChild>
                   <Link href="/sign-up">
                     Get Started
@@ -112,7 +119,10 @@ export default function LandingPage() {
                   </Link>
                 </Button>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button size="lg" variant="outline" asChild>
                   <Link href="/sign-in">Sign In</Link>
                 </Button>
@@ -121,7 +131,7 @@ export default function LandingPage() {
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
             <div className="hidden md:block ">
-               <Earth />  
+              <Earth />
             </div>
           </AnimatedSection>
         </div>
@@ -131,7 +141,9 @@ export default function LandingPage() {
       <section className="py-12 md:py-24 bg-muted/50">
         <div className="container mx-auto px-4">
           <AnimatedSection>
-            <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">
+              Key Features
+            </h2>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <FeatureCard
@@ -168,9 +180,14 @@ export default function LandingPage() {
           <AnimatedSection>
             <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join thousands of facilities using our intelligent system to optimize operations and enhance security.
+              Join thousands of facilities using our intelligent system to
+              optimize operations and enhance security.
             </p>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-block"
+            >
               <Button size="lg" asChild>
                 <Link href="/sign-up">Create Your Account</Link>
               </Button>
@@ -190,10 +207,12 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <Logo size="sm" />
-            <div className="mt-4 md:mt-0 text-sm text-muted-foreground">© 2024 IntelliPower. All rights reserved.</div>
+            <div className="mt-4 md:mt-0 text-sm text-muted-foreground">
+              © 2024 IntelliPower. All rights reserved.
+            </div>
           </div>
         </div>
       </motion.footer>
     </div>
-  )
+  );
 }
