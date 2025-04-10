@@ -1,148 +1,92 @@
-// PurpleEarth.jsx
-import { useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
-import { BlendFunction } from 'postprocessing'
-import * as THREE from 'three'
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 
-// Inner Earth model component
-const PurpleEarthModel = () => {
-  const earthRef = useRef()
-  const continentsRef = useRef()
-  const reliefRef = useRef()
+const World = dynamic(
+  () => import("../components/ui/globe").then((m) => m.World),
+  {
+    ssr: false,
+  },
+);
 
-  // Handle rotation animation
-  useFrame(({ mouse, viewport }) => {
-    // Auto rotation
-    if (earthRef.current) {
-      earthRef.current.rotation.y += 0.001
-    }
-
-    if (continentsRef.current) {
-      continentsRef.current.rotation.y += 0.001
-    }
-
-    if (reliefRef.current) {
-      reliefRef.current.rotation.y += 0.001
-    }
-
-    // Mouse rotation control
-    const mouseX = (mouse.x * viewport.width) / viewport.width
-    const mouseY = (mouse.y * viewport.height) / viewport.height
-
-    const targetRotationY = mouseX * 0.5
-    const targetRotationX = mouseY * 0.3
-
-    // Apply rotation to all layers
-    if (earthRef.current) {
-      earthRef.current.rotation.y = targetRotationY
-      earthRef.current.rotation.x = targetRotationX
-    }
-
-    if (continentsRef.current) {
-      continentsRef.current.rotation.y = targetRotationY
-      continentsRef.current.rotation.x = targetRotationX
-    }
-
-    if (reliefRef.current) {
-      reliefRef.current.rotation.y = targetRotationY
-      reliefRef.current.rotation.x = targetRotationX
-    }
-  })
-
-  const EARTH_RADIUS = 1
+export default function GlobeDemo() {
+  const globeConfig = {
+    pointSize: 4,
+    globeColor: "#6D28D9", // Purple color
+    showAtmosphere: true,
+    atmosphereColor: "rgba(216, 180, 254, 0.5)", // Light purple atmosphere
+    atmosphereAltitude: 0.25,
+    emissive: "#7C3AED", // Purple emissive color
+    emissiveIntensity: 0.2,
+    shininess: 0.9,
+    polygonColor: "rgba(255,255,255,0.7)",
+    ambientLight: "#8B5CF6", // Purple ambient light
+    directionalLeftLight: "#ffffff",
+    directionalTopLight: "#ffffff",
+    pointLight: "#ffffff",
+    arcTime: 1000,
+    arcLength: 0.9,
+    rings: 0, // Remove rings
+    maxRings: 0,
+    initialPosition: { lat: 22.3193, lng: 114.1694 },
+    autoRotate: true,
+    autoRotateSpeed: 0.8,
+  };
+  const purpleColors = ["#8B5CF6", "#7C3AED", "#6D28D9", "#5B21B6", "#4C1D95"];
+  const sampleArcs = [
+    {
+      order: 1,
+      startLat: -19.885592,
+      startLng: -43.951191,
+      endLat: -22.9068,
+      endLng: -43.1729,
+      arcAlt: 0.1,
+      color: purpleColors[0],
+    },
+    {
+      order: 1,
+      startLat: 28.6139,
+      startLng: 77.209,
+      endLat: 3.139,
+      endLng: 101.6869,
+      arcAlt: 0.2,
+      color: purpleColors[1],
+    },
+    {
+      order: 1,
+      startLat: -19.885592,
+      startLng: -43.951191,
+      endLat: -1.303396,
+      endLng: 36.852443,
+      arcAlt: 0.5,
+      color: purpleColors[2],
+    },
+    {
+      order: 2,
+      startLat: 1.3521,
+      startLng: 103.8198,
+      endLat: 35.6762,
+      endLng: 139.6503,
+      arcAlt: 0.2,
+      color: purpleColors[3],
+    },
+    {
+      order: 2,
+      startLat: 51.5072,
+      startLng: -0.1276,
+      endLat: 3.139,
+      endLng: 101.6869,
+      arcAlt: 0.3,
+      color: purpleColors[4],
+    },
+  ];
 
   return (
-    <>
-      {/* Main Earth sphere */}
-      <mesh ref={earthRef}>
-        <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
-        <meshPhongMaterial 
-          color="#ffffff"
-          specular="#666666"
-          shininess={25}
-          emissive="#330066"
-          emissiveIntensity={0.2}
-        />
-      </mesh>
-
-      {/* Continents layer */}
-      <mesh ref={continentsRef}>
-        <sphereGeometry args={[EARTH_RADIUS, 64, 64]} />
-        <meshBasicMaterial
-          color="#8a4fff"
-          transparent={true}
-          opacity={0.7}
-        />
-      </mesh>
-
-      {/* Relief wireframe layer */}
-      <mesh ref={reliefRef}>
-        <sphereGeometry args={[EARTH_RADIUS, 32, 32]} />
-        <meshStandardMaterial
-          color="#b088ff"
-          transparent={true}
-          opacity={0.4}
-          wireframe={true}
-        />
-      </mesh>
-
-      {/* Atmosphere glow */}
-      <mesh>
-        <sphereGeometry args={[EARTH_RADIUS * 1.016, 64, 64]} />
-        <meshBasicMaterial
-          color="#9040ff"
-          transparent={true}
-          opacity={0.15}
-          side={THREE.BackSide}
-        />
-      </mesh>
-
-      {/* Subtle glow effect */}
-      <mesh>
-        <sphereGeometry args={[EARTH_RADIUS * 1.01, 64, 64]} />
-        <meshBasicMaterial
-          color="#a364ff"
-          transparent={true}
-          opacity={0.1}
-        />
-      </mesh>
-
-      {/* Lights */}
-      <ambientLight intensity={0.8} color="#555555" />
-      <directionalLight position={[5, 3, 5]} intensity={1} />
-      <pointLight position={[-2, 1, 1]} intensity={3} color="#9933ff" distance={10} />
-    </>
-  )
-}
-
-// Main component with Canvas
-const PurpleEarth = () => {
-  return (
-    <div className="w-full h-screen">
-      <Canvas camera={{ position: [0, 0, 2.5], fov: 75 }}>
-        <PurpleEarthModel />
-
-        <EffectComposer>
-          <Bloom 
-            intensity={0.5}
-            luminanceThreshold={0.2}
-            luminanceSmoothing={0.9}
-            blendFunction={BlendFunction.SCREEN}
-          />
-        </EffectComposer>
-
-        <OrbitControls 
-          enablePan={false}
-          enableZoom={false}
-          minDistance={1.5}
-          maxDistance={4}
-          enableRotate={false} // Disable orbit controls rotation since we're using mouse control
-        />
-      </Canvas>
+    <div className="max-w-7xl mx-auto w-full overflow-hidden h-full md:h-[40rem] relative place-items-center">
+      <div className="absolute w-full  h-72 md:h-full z-10 ">
+        <World data={sampleArcs} globeConfig={globeConfig} />
+      </div>
     </div>
-  )
+  );
 }
-
-export default PurpleEarth
