@@ -5,6 +5,7 @@ type AreaFloor = {
   value: string;
   label: string;
   type: string;
+  id: string;
 };
 
 type AreaFloorStore = {

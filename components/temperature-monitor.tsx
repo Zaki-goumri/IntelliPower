@@ -38,13 +38,7 @@ const generateMockData = () => {
   return data;
 };
 
-export default function TemperatureMonitor({ path }: { path: string }) {
-  const { data: temperatures } = useGetTemp(path);
-
-  useEffect(() => {
-    console.log(temperatures);
-  }, []);
-
+export default function TemperatureMonitor() {
   const [data, setData] = useState(generateMockData());
   const [currentTemp, setCurrentTemp] = useState(
     data[data.length - 1].temperature,

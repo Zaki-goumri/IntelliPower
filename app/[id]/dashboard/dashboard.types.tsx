@@ -7,3 +7,15 @@ export interface IFloor {
   id: string;
   areas: IArea[];
 }
+
+export const FLOOR_ENUM = {
+  FLOOR: "floor",
+  AREA: "area",
+};
+
+export interface AreaFlour {
+  label: string;
+  id: string;
+  type: string;
+  value: string;
+}
