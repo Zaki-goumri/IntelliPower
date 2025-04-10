@@ -18,6 +18,7 @@ instance.interceptors.request.use(
       ?.split("=")[1];
     if (accessToken) {
       request.headers["Authorization"] = `Bearer ${accessToken}`;
+      console.log('Authorization header set');
     }
     return request;
   },
@@ -67,7 +68,6 @@ instance.interceptors.response.use(
         }
         instance.defaults.headers.common["Authorization"] =
           `Bearer ${newAccessToken}`;
-
         return instance(originalRequest);
       } catch (refreshError) {
         document.cookie = serialize("accessToken", "", {

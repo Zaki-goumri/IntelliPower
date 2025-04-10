@@ -1,50 +1,76 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { Thermometer, AlertTriangle } from "lucide-react"
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { Thermometer, AlertTriangle } from "lucide-react";
+import { useAreaFloorStore } from "@/store/useAreaSelector";
+import useGetTemp from "@/app/[id]/dashboard/useGetTemp";
 
 // Mock data - in a real implementation, this would come from your sensors
 const generateMockData = () => {
-  const data = []
-  const now = new Date()
+  const data = [];
+  const now = new Date();
 
   for (let i = 24; i >= 0; i--) {
-    const time = new Date(now.getTime() - i * 3600000)
+    const time = new Date(now.getTime() - i * 3600000);
     data.push({
       time: time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       temperature: Math.round((22 + Math.random() * 8) * 10) / 10,
-    })
+    });
   }
 
-  return data
-}
+  return data;
+};
 
-export default function TemperatureMonitor() {
-  const [data, setData] = useState(generateMockData())
-  const [currentTemp, setCurrentTemp] = useState(data[data.length - 1].temperature)
-  const [threshold, setThreshold] = useState(28)
+export default function TemperatureMonitor({ path }: { path: string }) {
+  const { data: temperatures } = useGetTemp(path);
 
-  // Simulate real-time updates
+  useEffect(() => {
+    console.log(temperatures);
+  }, []);
+
+  const [data, setData] = useState(generateMockData());
+  const [currentTemp, setCurrentTemp] = useState(
+    data[data.length - 1].temperature,
+  );
+  const [threshold, setThreshold] = useState(28);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      const newData = [...data.slice(1)]
-      const now = new Date()
+      const newData = [...data.slice(1)];
+      const now = new Date();
       newData.push({
-        time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        time: now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
         temperature: Math.round((22 + Math.random() * 8) * 10) / 10,
-      })
+      });
 
-      setData(newData)
-      setCurrentTemp(newData[newData.length - 1].temperature)
-    }, 60000) // Update every minute
+      setData(newData);
+      setCurrentTemp(newData[newData.length - 1].temperature);
+    }, 60000); // Update every minute
 
-    return () => clearInterval(interval)
-  }, [data])
+    return () => clearInterval(interval);
+  }, [data]);
 
-  const isHighTemperature = currentTemp > threshold
+  const isHighTemperature = currentTemp > threshold;
 
   return (
     <Card>
@@ -66,7 +92,9 @@ export default function TemperatureMonitor() {
             <Thermometer className="h-8 w-8 mr-2 text-blue-500" />
             <div className="text-3xl font-bold">{currentTemp}°C</div>
           </div>
-          <div className="text-sm text-muted-foreground">Threshold: {threshold}°C</div>
+          <div className="text-sm text-muted-foreground">
+            Threshold: {threshold}°C
+          </div>
         </div>
 
         <Tabs defaultValue="24h">
@@ -106,5 +134,5 @@ export default function TemperatureMonitor() {
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }
