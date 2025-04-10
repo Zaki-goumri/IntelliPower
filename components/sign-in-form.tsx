@@ -25,8 +25,8 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { LoginRequest } from "@/app/(auht)/sign-in/signin.types";
-import useSignin from "@/app/(auht)/sign-in/useSignin";
+import { LoginRequest } from "@/app/(auth)/sign-in/signin.types";
+import useSignin from "@/app/(auth)/sign-in/useSignin";
 import Link from "next/link";
 
 const formSchema = z.object({

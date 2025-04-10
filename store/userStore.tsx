@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { User } from "../app/(auht)/sign-in/signin.types";
+import { User } from "../app/(auth)/sign-in/signin.types";
 
 type UserStore = {
   user: User | null;
@@ -12,7 +12,7 @@ export const useUserStore = create<UserStore>()(
   persist(
     (set) => ({
       user: null,
-      setUser: (userData) => set({ user: userData }),
+      login: (userData) => set({ user: userData }),
       logout: () => set({ user: null }),
     }),
     {

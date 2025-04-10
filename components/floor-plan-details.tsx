@@ -37,7 +37,7 @@ export function FloorPlanDetails({ floorPlan }: FloorPlanDetailsProps) {
   return (
     <div className="space-y-6">
       <Card className="border-purple-200 dark:border-purple-800">
-        <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+        <CardHeader className="">
           <CardTitle className="flex items-center gap-2 text-purple-900 dark:text-purple-100">
             <LayoutGrid size={18} className="text-purple-600 dark:text-purple-400" />
             Floor Plan Details
@@ -126,7 +126,7 @@ export function FloorPlanDetails({ floorPlan }: FloorPlanDetailsProps) {
 
         <TabsContent value="cameras" className="mt-4">
           <Card className="border-purple-200 dark:border-purple-800">
-            <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+            <CardHeader className="">
               <CardTitle className="flex items-center justify-between text-purple-900 dark:text-purple-100">
                 <span className="flex items-center gap-2">
                   <Camera size={18} className="text-purple-600 dark:text-purple-400" />
@@ -197,7 +197,7 @@ export function FloorPlanDetails({ floorPlan }: FloorPlanDetailsProps) {
 
         <TabsContent value="doors" className="mt-4">
           <Card className="border-purple-200 dark:border-purple-800">
-            <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+            <CardHeader className="">
               <CardTitle className="flex items-center justify-between text-purple-900 dark:text-purple-100">
                 <span className="flex items-center gap-2">
                   <DoorOpen size={18} className="text-purple-600 dark:text-purple-400" />
@@ -266,7 +266,7 @@ export function FloorPlanDetails({ floorPlan }: FloorPlanDetailsProps) {
 
         <TabsContent value="windows" className="mt-4">
           <Card className="border-purple-200 dark:border-purple-800">
-            <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+            <CardHeader className="">
               <CardTitle className="flex items-center gap-2 text-purple-900 dark:text-purple-100">
                 <Blinds size={18} className="text-purple-600 dark:text-purple-400" />
                 Windows
@@ -301,7 +301,7 @@ export function FloorPlanDetails({ floorPlan }: FloorPlanDetailsProps) {
 
         <TabsContent value="furniture" className="mt-4">
           <Card className="border-purple-200 dark:border-purple-800">
-            <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+            <CardHeader className="">
               <CardTitle className="flex items-center gap-2 text-purple-900 dark:text-purple-100">
                 <Sofa size={18} className="text-purple-600 dark:text-purple-400" />
                 Furniture

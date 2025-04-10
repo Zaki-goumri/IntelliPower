@@ -2,7 +2,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { loginUser } from "./signin.service";
-import { User, LoginRequest } from "./signin.types";
+import { User, LoginRequest, LoginResponse } from "./signin.types";
 import { useUserStore } from "../../../store/userStore";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";

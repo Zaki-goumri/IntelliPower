@@ -138,7 +138,7 @@ export function FloorPlanManagement() {
   }
 
   return (
-    <div className="container mx-auto space-y-6">
+    <div className="container mx-auto space-y-6 ">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-purple-100">Floor Plans Management</h1>
@@ -151,11 +151,11 @@ export function FloorPlanManagement() {
       </div>
 
       {isCreatingNew ? (
-        <Card className="border-purple-200 dark:border-purple-800">
-          <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+        <Card className="">
+          <CardHeader className="">
             <CardTitle className="text-purple-900 dark:text-purple-100">Create New Floor Plan</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="py-5">
             <FloorPlanForm onSubmit={handleAddNewPlan} onCancel={() => setIsCreatingNew(false)} />
           </CardContent>
         </Card>
@@ -175,8 +175,8 @@ export function FloorPlanManagement() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-4">
-            <Card className="border-purple-200 dark:border-purple-800">
-              <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+            <Card className="">
+              <CardHeader className="">
                 <CardTitle className="flex items-center gap-2 text-purple-900 dark:text-purple-100">
                   <Building size={18} className="text-purple-600 dark:text-purple-400" />
                   Floor Plans
@@ -230,24 +230,16 @@ export function FloorPlanManagement() {
             </Card>
 
             {selectedFloorPlan && (
-              <Card className="border-purple-200 dark:border-purple-800">
-                <CardHeader className="bg-purple-50 dark:bg-purple-900/50">
+              <Card className="">
+                <CardHeader className=" ">
                   <CardTitle className="flex items-center justify-between text-purple-900 dark:text-purple-100">
                     <span className="flex items-center gap-2">
                       <Info size={18} className="text-purple-600 dark:text-purple-400" />
                       Quick Info
                     </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setShowDetails(!showDetails)}
-                      className="text-xs border-purple-300 text-purple-700 hover:bg-purple-100 dark:border-purple-700 dark:text-purple-300 dark:hover:bg-purple-800/50"
-                    >
-                      {showDetails ? "Hide Details" : "Show Details"}
-                    </Button>
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="py-4">
                   <div className="space-y-3">
                     <div>
                       <div className="text-sm font-medium text-purple-600 dark:text-purple-400">Name</div>
@@ -296,7 +288,7 @@ export function FloorPlanManagement() {
 
           <div className="lg:col-span-2">
             <Tabs defaultValue="preview" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-purple-100 dark:bg-purple-900">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger
                   value="preview"
                   className="data-[state=active]:bg-white dark:data-[state=active]:bg-purple-800 data-[state=active]:text-purple-900 dark:data-[state=active]:text-purple-100"
@@ -312,13 +304,13 @@ export function FloorPlanManagement() {
               </TabsList>
               <TabsContent value="preview" className="mt-4">
                 {selectedFloorPlan ? (
-                  <Card className="border-purple-200 dark:border-purple-800">
+                  <Card className="">
                     <CardContent className="p-0 overflow-hidden rounded-md">
                       <FloorPlanCanvas floorPlanData={selectedFloorPlan} />
                     </CardContent>
                   </Card>
                 ) : (
-                  <div className="flex items-center justify-center h-64 bg-purple-100 dark:bg-purple-900/50 rounded-md">
+                  <div className="flex items-center justify-center h-64 rounded-md">
                     <p className="text-purple-600 dark:text-purple-300">Select a floor plan to preview</p>
                   </div>
                 )}
@@ -327,7 +319,7 @@ export function FloorPlanManagement() {
                 {selectedFloorPlan ? (
                   <FloorPlanDetails floorPlan={selectedFloorPlan} />
                 ) : (
-                  <div className="flex items-center justify-center h-64 bg-purple-100 dark:bg-purple-900/50 rounded-md">
+                  <div className="flex items-center justify-center h-64 rounded-md">
                     <p className="text-purple-600 dark:text-purple-300">Select a floor plan to view details</p>
                   </div>
                 )}
