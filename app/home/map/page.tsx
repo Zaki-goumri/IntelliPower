@@ -1,65 +1,41 @@
-"use client"; // if you're in the App Router
+'use client'
+import { FloorPlanCanvas } from "./FloorPlanCanvas";
+import { useFloorPlanData } from "./useFloorPlanData";
 
-import dynamic from "next/dynamic";
-import React from "react";
-import { FloorPlanData } from "./drawer";
-// If you want to dynamically import:
-const DynamicFloorPlan = dynamic(() => import("./drawer"), {
-  ssr: false,
-});
-
-export default function HomePage() {
-  const floorPlanData: FloorPlanData = {
-    dimensions: { width: 800, height: 600 },
-    rooms: [
-      {
-        id: "room-1",
-        label: "Room 1",
-        polygon: [
-          // Main room outline
-          { x: 100, y: 200 }, // Southwest corner
-          { x: 200, y: 200 }, // Southeast corner
-          { x: 200, y: 250 }, // East wall
-          { x: 180, y: 250 }, // Doorway indentation start
-          { x: 180, y: 270 }, // Doorway indentation
-          { x: 150, y: 270 }, // Doorway indentation end
-
-          // Living area section
-          { x: 150, y: 300 }, // North wall segment
-          { x: 160, y: 310 }, // Window bay start
-          { x: 170, y: 320 }, // Window bay middle
-          { x: 160, y: 330 }, // Window bay end
-          { x: 150, y: 340 }, // North wall continued
-
-          // Bedroom section
-          { x: 150, y: 350 }, // Northeast corner
-          { x: 100, y: 350 }, // Northwest corner
-          { x: 100, y: 300 }, // West wall
-
-          // Bathroom section
-          { x: 120, y: 300 }, // Bathroom partition start
-          { x: 120, y: 250 }, // Bathroom partition corner
-          { x: 100, y: 250 }, // Bathroom partition end
-          { x: 100, y: 200 }, // Back to starting point
-        ],
-        status: "normal",
-      },
-    ],
-    doors: [
-      {
-        id: "door-1",
-        roomId: "room-1",
-        start: { x: 180, y: 260 },
-        doorWidth: 30,
-        orientation: 0,
-      },
-    ],
-  };
+const Index = () => {
+  const { floorPlanData, isLoading, error } = useFloorPlanData();
 
   return (
-    <div>
-      <h1>Floor Plan</h1>
-      <DynamicFloorPlan floorPlanData={floorPlanData} />
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+      <header className="w-full py-6 bg-white shadow-md">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl font-bold text-center text-black">Floor Planner</h1>
+        </div>
+      </header>
+
+      <main className="container mx-auto flex-1 px-4 py-8 flex flex-col items-center">
+        {isLoading && (
+          <div className="flex items-center justify-center h-96 w-full">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-600"></div>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-4">
+            <p>Error loading floor plan data: {error.message}</p>
+          </div>
+        )}
+
+        {floorPlanData && (
+          <div className="w-full max-w-5xl  rounded-lg overflow-hidden bg-white">
+            <FloorPlanCanvas floorPlanData={floorPlanData} />
+          </div>
+        )}
+
+        
+      </main>
     </div>
   );
-}
+};
+
+export default Index;
