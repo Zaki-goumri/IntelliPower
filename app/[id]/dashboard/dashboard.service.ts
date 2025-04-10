@@ -45,7 +45,9 @@ export async function fetchDashboardData(type: string, id: string) {
   try {
     const [temperatureData, energyConsumation] = await Promise.all([
       axios.get(("/temperature/" + type + "/" + id) as string),
-      axios.get(("/consumtion/" + type + "/" + id) as string, { params: { groupBy: 'day' }}),
+      axios.get(("/consumtion/" + type + "/" + id) as string, {
+        params: { groupBy: "day" },
+      }),
     ]);
     return { temperatureData, energyConsumation };
   } catch (error) {

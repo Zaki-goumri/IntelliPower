@@ -22,7 +22,6 @@ import { Thermometer, AlertTriangle } from "lucide-react";
 import { useAreaFloorStore } from "@/store/useAreaSelector";
 import useGetTemp from "@/app/[id]/dashboard/useGetTemp";
 
-// Mock data - in a real implementation, this would come from your sensors
 const generateMockData = () => {
   const data = [];
   const now = new Date();
@@ -38,8 +37,44 @@ const generateMockData = () => {
   return data;
 };
 
+// Generate mock data for weekly view
+const generateWeeklyMockData = () => {
+  const data = [];
+  const now = new Date();
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(now.getTime() - i * 24 * 3600000);
+    const dayName = dayNames[date.getDay()];
+    data.push({
+      time: dayName,
+      temperature: Math.round((22 + Math.random() * 8) * 10) / 10,
+    });
+  }
+
+  return data;
+};
+
+// Generate mock data for monthly view
+const generateMonthlyMockData = () => {
+  const data = [];
+  const now = new Date();
+
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(now.getTime() - i * 24 * 3600000);
+    data.push({
+      time: `${date.getDate()}/${date.getMonth() + 1}`,
+      temperature: Math.round((22 + Math.random() * 8) * 10) / 10,
+    });
+  }
+
+  return data;
+};
+
 export default function TemperatureMonitor() {
   const [data, setData] = useState(generateMockData());
+  const [weeklyData, setWeeklyData] = useState(generateWeeklyMockData());
+  const [monthlyData, setMonthlyData] = useState(generateMonthlyMockData());
   const [currentTemp, setCurrentTemp] = useState(
     data[data.length - 1].temperature,
   );
@@ -115,15 +150,41 @@ export default function TemperatureMonitor() {
               </LineChart>
             </ResponsiveContainer>
           </TabsContent>
-          <TabsContent value="week">
-            <div className="h-[200px] flex items-center justify-center text-muted-foreground">
-              Weekly data visualization
-            </div>
+          <TabsContent value="week" className="h-[200px] mt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={weeklyData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="time" />
+                <YAxis domain={[20, 35]} />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="temperature"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </TabsContent>
-          <TabsContent value="month">
-            <div className="h-[200px] flex items-center justify-center text-muted-foreground">
-              Monthly data visualization
-            </div>
+          <TabsContent value="month" className="h-[200px] mt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="time" />
+                <YAxis domain={[20, 35]} />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="temperature"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </TabsContent>
         </Tabs>
       </CardContent>

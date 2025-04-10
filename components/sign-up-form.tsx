@@ -33,8 +33,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { RegisterRequest } from "@/app/(auht)/sign-up/signup.types";
-import useSignup from "@/app/(auht)/sign-up/useSignup";
+import type { RegisterRequest } from "@/app/(auth)/sign-up/signup.types";
+import useSignup from "@/app/(auth)/sign-up/useSignup";
 
 const UserRole = z.enum(["ADMIN", "EMPLOYEE"]);
 type UserRole = z.infer<typeof UserRole>;

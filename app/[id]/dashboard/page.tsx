@@ -35,8 +35,8 @@ export default function DashboardPage() {
       if (selectedFloor) {
         try {
           const dashboardData = await fetchDashboardData(
-            selected.type,
-            selected.id,
+            selected?.type,
+            selected?.id,
           );
           console.log(dashboardData);
         } catch (error) {
