@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serialize } from "cookie";
 
-const baseUrl = process.env.NEXT_PUBLIC_BACK_URL;
+export const baseUrl = process.env.NEXT_PUBLIC_BACK_URL;
 
 const instance = axios.create({
   baseURL: baseUrl,

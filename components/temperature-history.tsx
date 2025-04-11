@@ -18,7 +18,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Calendar, Clock, Download } from "lucide-react";
+import { Calendar, Clock, Download, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface TemperatureReading {
@@ -56,11 +56,13 @@ export default function TemperatureHistory({
 
   useEffect(() => {
     try {
-      const calculatedStats = calculateStats(data);
-
+      console.log(data);
       setChartData(data?.content);
-      console.log(data?.content)
-      setStats(calculatedStats);
+      setStats({
+        avg: data?.average,
+        min: data?.min?.temp,
+        max: data?.max?.temp,
+      });
       setLoading(false);
     } catch (error) {
       console.error("Error processing data:", error);
@@ -87,7 +89,10 @@ export default function TemperatureHistory({
     const recentDay = data.actualRes?.[0];
     if (!recentDay?.content?.length) return [];
 
-    const hourlyData: Map<string, { tempSum: number; humiditySum: number; count: number }> = new Map();
+    const hourlyData: Map<
+      string,
+      { tempSum: number; humiditySum: number; count: number }
+    > = new Map();
 
     recentDay.content.forEach((reading) => {
       try {
@@ -95,7 +100,11 @@ export default function TemperatureHistory({
         const hour = date.getHours();
         const hourKey = `${hour.toString().padStart(2, "0")}:00`;
 
-        const current = hourlyData.get(hourKey) || { tempSum: 0, humiditySum: 0, count: 0 };
+        const current = hourlyData.get(hourKey) || {
+          tempSum: 0,
+          humiditySum: 0,
+          count: 0,
+        };
         hourlyData.set(hourKey, {
           tempSum: current.tempSum + (reading.temp || 0),
           humiditySum: current.humiditySum + (reading.humidity || 0),
@@ -117,47 +126,40 @@ export default function TemperatureHistory({
 
   const processWeeklyData = (data: HistoryData) => {
     return (data.actualRes || []).slice(0, 7).map((day) => {
-      const humidityValues = day.content.map(reading => reading.humidity).filter(h => h !== undefined);
-      const avgHumidity = humidityValues.length > 0 
-        ? humidityValues.reduce((sum, val) => sum + val, 0) / humidityValues.length
-        : undefined;
+      const humidityValues = day.content
+        .map((reading) => reading.humidity)
+        .filter((h) => h !== undefined);
+      const avgHumidity =
+        humidityValues.length > 0
+          ? humidityValues.reduce((sum, val) => sum + val, 0) /
+            humidityValues.length
+          : undefined;
 
       return {
         time: new Date(day.key).toLocaleDateString([], { weekday: "short" }),
         temperature: parseFloat((day.average || 0).toFixed(1)),
-        humidity: avgHumidity ? parseFloat(avgHumidity.toFixed(1)) : undefined
+        humidity: avgHumidity ? parseFloat(avgHumidity.toFixed(1)) : undefined,
       };
     });
   };
 
   const processMonthlyData = (data: HistoryData) => {
     return (data.actualRes || []).map((day) => {
-      const humidityValues = day.content.map(reading => reading.humidity).filter(h => h !== undefined);
-      const avgHumidity = humidityValues.length > 0 
-        ? humidityValues.reduce((sum, val) => sum + val, 0) / humidityValues.length
-        : undefined;
+      const humidityValues = day.content
+        .map((reading) => reading.humidity)
+        .filter((h) => h !== undefined);
+      const avgHumidity =
+        humidityValues.length > 0
+          ? humidityValues.reduce((sum, val) => sum + val, 0) /
+            humidityValues.length
+          : undefined;
 
       return {
         time: new Date(day.key).getDate().toString(),
         temperature: parseFloat((day.average || 0).toFixed(1)),
-        humidity: avgHumidity ? parseFloat(avgHumidity.toFixed(1)) : undefined
+        humidity: avgHumidity ? parseFloat(avgHumidity.toFixed(1)) : undefined,
       };
     });
-  };
-
-  const calculateStats = (data: HistoryData) => {
-    const allTemps = (data.actualRes || [])
-      .flatMap((day) => day.content?.map((r) => r.temp) || [])
-      .filter((temp): temp is number => typeof temp === "number");
-
-    if (allTemps.length === 0) return { avg: 0, min: 0, max: 0 };
-
-    const avg = allTemps.reduce((s, t) => s + t, 0) / allTemps.length;
-    return {
-      avg: parseFloat(avg.toFixed(1)),
-      min: parseFloat(Math.min(...allTemps).toFixed(1)),
-      max: parseFloat(Math.max(...allTemps).toFixed(1)),
-    };
   };
 
   return (
@@ -168,7 +170,12 @@ export default function TemperatureHistory({
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={period} onValueChange={(value) => onChangePeriod(value as "DAY" | "WEEK" | "MONTH")}>
+        <Tabs
+          value={period}
+          onValueChange={(value) =>
+            onChangePeriod(value as "DAY" | "WEEK" | "MONTH")
+          }
+        >
           <div className="flex justify-between items-center mb-4">
             <TabsList>
               <TabsTrigger value="DAY" className="flex items-center">
@@ -184,11 +191,6 @@ export default function TemperatureHistory({
                 Monthly
               </TabsTrigger>
             </TabsList>
-
-            {/* <Button variant="outline" size="sm" className="flex items-center">
-              <Download className="h-4 w-4 mr-2" />
-              Export
-            </Button> */}
           </div>
 
           {loading ? (
@@ -226,29 +228,26 @@ const ChartComponent = ({
   yDomain: [number, number];
 }) => (
   <ResponsiveContainer width="100%" height="100%">
-    <LineChart 
-      data={data}
-      margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
-    >
+    <LineChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="time" />
-      <YAxis 
-        yAxisId="left" 
-        domain={yDomain} 
-        label={{ value: '°C', angle: -90, position: 'insideLeft' }} 
+      <YAxis
+        yAxisId="left"
+        domain={yDomain}
+        label={{ value: "°C", angle: -90, position: "insideLeft" }}
       />
-      <YAxis 
-        yAxisId="right" 
-        orientation="right" 
-        domain={[0, 100]} 
-        label={{ value: '%', angle: 90, position: 'insideRight' }} 
+      <YAxis
+        yAxisId="right"
+        orientation="right"
+        domain={[0, 100]}
+        label={{ value: "%", angle: 90, position: "insideRight" }}
       />
-      <Tooltip 
+      <Tooltip
         formatter={(value: number, name: string) => {
-          if (name === 'temp') return [`${value}°C`, "Temperature"];
-          if (name === 'humidity') return [`${value}%`, "Humidity"];
+          if (name === "temp") return [`${value}°C`, "Temperature"];
+          if (name === "humidity") return [`${value}%`, "Humidity"];
           return [value, name];
-        }} 
+        }}
       />
       <Line
         yAxisId="left"
@@ -283,19 +282,19 @@ const StatsDisplay = ({
     <div className="bg-muted p-2 rounded-md">
       <div className="text-sm font-medium">Average</div>
       <div className="text-xl font-bold text-blue-500">
-        {stats.avg.toFixed(1)}°C
+        {stats.avg?.toFixed(1) || "N/A"}°C
       </div>
     </div>
     <div className="bg-muted p-2 rounded-md">
       <div className="text-sm font-medium">Min</div>
       <div className="text-xl font-bold text-green-500">
-        {stats.min.toFixed(1)}°C
+        {stats.min?.toFixed(1) || "N/A"}°C
       </div>
     </div>
     <div className="bg-muted p-2 rounded-md">
       <div className="text-sm font-medium">Max</div>
       <div className="text-xl font-bold text-amber-500">
-        {stats.max.toFixed(1)}°C
+        {stats.max?.toFixed(1) || "N/A"}°C
       </div>
     </div>
   </div>

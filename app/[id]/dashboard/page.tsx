@@ -9,6 +9,7 @@ import {
   fetchDashboardTemperatureData,
   fetchEnergyConsumationData,
 } from "./dashboard.service";
+import { ToastContainer } from "react-toastify";
 
 type Period = "DAY" | "WEEK" | "MONTH";
 
@@ -90,6 +91,18 @@ export default function DashboardPage() {
 
   return (
     <main className="flex min-h-screen flex-col p-6 w-full">
+     <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">
           Intelligent Power & Security System

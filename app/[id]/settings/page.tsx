@@ -11,7 +11,6 @@ export default function SettingsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <SystemSettings />
         <NotificationSettings />
-        <SecuritySettings />
         <MaintenanceSettings />
       </div>
     </main>
