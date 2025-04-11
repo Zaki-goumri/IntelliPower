@@ -1,30 +1,50 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { UserPlus, MoreHorizontal, Search, UserX, UserCog, Mail } from "lucide-react"
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  UserPlus,
+  MoreHorizontal,
+  Search,
+  UserX,
+  UserCog,
+  Mail,
+} from "lucide-react";
 
 type User = {
-  id: string
-  name: string
-  email: string
-  role: string
-  status: "active" | "inactive"
-  lastActive: string
-  avatar: string
-}
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: "active" | "inactive";
+  lastActive: string;
+  avatar: string;
+};
 
 const initialUsers: User[] = [
   {
@@ -72,18 +92,18 @@ const initialUsers: User[] = [
     lastActive: "3 hours ago",
     avatar: "/placeholder.svg?height=40&width=40",
   },
-]
+];
 
 export default function UserManagement() {
-  const [users, setUsers] = useState<User[]>(initialUsers)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredUsers = users.filter(
     (user) =>
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.role.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+  );
 
   return (
     <Card className="h-full">
@@ -116,7 +136,6 @@ export default function UserManagement() {
               <TableRow>
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
                 <TableHead>Last Active</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
@@ -137,16 +156,13 @@ export default function UserManagement() {
                       </Avatar>
                       <div>
                         <div className="font-medium">{user.name}</div>
-                        <div className="text-sm text-muted-foreground">{user.email}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {user.email}
+                        </div>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>{user.role}</TableCell>
-                  <TableCell>
-                    <Badge variant={user.status === "active" ? "default" : "outline"}>
-                      {user.status === "active" ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
                   <TableCell>{user.lastActive}</TableCell>
                   <TableCell>
                     <DropdownMenu>
@@ -180,5 +196,5 @@ export default function UserManagement() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
