@@ -14,7 +14,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
     const eventSource = new EventSource(sseUrl);
     eventSource.addEventListener("Notification", (event) => {
-      console.log("Custom notification event:", event);
       try {
         const data = event.data;
         console.log("Parsed custom event data:", data);
@@ -44,7 +43,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="Dark"
       />
       {children}
     </QueryClientProvider>

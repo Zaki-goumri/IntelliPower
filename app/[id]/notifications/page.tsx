@@ -15,8 +15,6 @@ export default function NotificationsPage() {
   useEffect(() => {
     if (data) {
       setNotifications(data);
-      console.log(data);
-      console.log(notifications);
     }
   }, [data]);
 
