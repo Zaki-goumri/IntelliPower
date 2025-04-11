@@ -41,16 +41,96 @@ export function addFloors(floors: IFloor[]) {
   return flatList;
 }
 
-export async function fetchDashboardData(type: string, id: string) {
+export async function fetchTemperatureData(
+  type: string,
+  id: string,
+  period: string,
+) {
   try {
-    const [temperatureData, energyConsumation] = await Promise.all([
-      axios.get(("/temperature/" + type + "/" + id) as string),
-      axios.get(("/consumtion/" + type + "/" + id) as string, {
-        params: { groupBy: "day" },
-      }),
-    ]);
-    return { temperatureData, energyConsumation };
-  } catch (error) {
+    const response = await axios.get(`/temperature/period/${type}/${id}`, {
+      params: { type: period },
+    });
+    return response;
+  } catch (error: any) {
+    console.error(
+      "Temperature API error:",
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
+}
+
+export async function fetchEnergyConsumationData(
+  type: string,
+  id: string,
+  period: string,
+) {
+  try {
+    const response = await axios.get(`/consumtion/period/${type}/${id}`, {
+      params: { type: period },
+    });
+    return response;
+  } catch (error: any) {
+    console.error(
+      "Energy Consumption API error:",
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
+}
+
+export async function fetchDashboardTemperatureData(
+  type: string,
+  id: string,
+  period: string,
+) {
+  try {
+    const temperatureData = await fetchTemperatureData(type, id, period);
+    return temperatureData;
+  } catch (error: any) {
+    console.error(
+      "Temperature Dashboard API error:",
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
+}
+
+export async function fetchDashboardEnergyConsumationData(
+  type: string,
+  id: string,
+  period: string,
+) {
+  try {
+    const energyConsumation = await fetchEnergyConsumationData(type, id, period);
+    return energyConsumation;
+  } catch (error: any) {
+    console.error(
+      "Energy Consumption Dashboard API error:",
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
+}
+
+export async function fetchDashboardData(
+  type: string,
+  id: string,
+  period: string,
+) {
+  try {
+    const temperatureData = await fetchDashboardTemperatureData(type, id, period);
+    const energyConsumation = await fetchDashboardEnergyConsumationData(type, id, period);
+
+    return {
+      temperatureData,
+      energyConsumation,
+    };
+  } catch (error: any) {
+    console.error(
+      "Dashboard API error:",
+      error.response?.data || error.message,
+    );
     throw error;
   }
 }

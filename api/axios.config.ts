@@ -18,7 +18,6 @@ instance.interceptors.request.use(
       ?.split("=")[1];
     if (accessToken) {
       request.headers["Authorization"] = `Bearer ${accessToken}`;
-      console.log('Authorization header set');
     }
     return request;
   },
@@ -49,8 +48,8 @@ instance.interceptors.response.use(
           refreshToken,
         });
 
-        const newAccessToken = response.data.newAccessToken;
-        const newRefreshToken = response.data.newRefreshToken;
+        const newAccessToken = response.data.accessToken;
+        const newRefreshToken = response.data.refreshToken;
         console.log(response.data);
         if (!newAccessToken) {
           return Promise.reject(error);

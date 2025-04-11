@@ -1,8 +1,6 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,25 +18,22 @@ import {
 } from "@/components/ui/popover";
 
 export type FloorSelectorProps = {
-  onFloorChange: (value: string) => void;
+  onFloorChange: (selectedId: string) => void;
   className?: string;
   data?: { value: string; label: string; type: string; id: string }[];
-  value?: string;
+  value?: string; // Now this represents the selected ID
 };
 
 export default function FloorSelector({
   onFloorChange,
   className,
   data,
-  value,
+  value, // This is now the selected ID
 }: FloorSelectorProps) {
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (data && data.length > 0 && !value) {
-      onFloorChange(data[0].value); // auto-set first floor if none is selected
-    }
-  }, [data, value, onFloorChange]);
+  // Find the selected item based on ID
+  const selectedItem = data?.find((area) => area.id === value);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -49,13 +44,10 @@ export default function FloorSelector({
           aria-expanded={open}
           className={cn("w-full justify-between", className)}
         >
-          {value
-            ? data?.find((area) => area.value === value)?.label
-            : "Select floor..."}
+          {selectedItem ? selectedItem.label : "Select floor..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-
       <PopoverContent className="w-full p-0">
         <Command>
           <CommandInput placeholder="Search floor or area..." />
@@ -73,11 +65,11 @@ export default function FloorSelector({
                 })
                 .map((area) => (
                   <CommandItem
-                    key={area.value}
-                    value={area.value}
-                    onSelect={(currentValue) => {
-                      if (currentValue !== value) {
-                        onFloorChange(currentValue);
+                    key={area.id}
+                    value={area.value} // Keep value for searching
+                    onSelect={() => {
+                      if (area.id !== value) {
+                        onFloorChange(area.id);
                       }
                       setOpen(false);
                     }}
@@ -85,7 +77,7 @@ export default function FloorSelector({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === area.value ? "opacity-100" : "opacity-0",
+                        value === area.id ? "opacity-100" : "opacity-0",
                       )}
                     />
                     {area.label}

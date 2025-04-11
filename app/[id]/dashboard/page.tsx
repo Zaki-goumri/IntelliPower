@@ -4,49 +4,90 @@ import TemperatureMonitor from "@/components/temperature-monitor";
 import PowerConsumption from "@/components/power-consumption";
 import HVACControl from "@/components/hvac-control";
 import FloorSelector from "@/components/floor-selector";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useGetData from "./useGetData";
-import { useAreaFloorStore } from "@/store/useAreaSelector";
-import { fetchDashboardData } from "./dashboard.service";
+import {
+  fetchDashboardTemperatureData,
+  fetchEnergyConsumationData,
+} from "./dashboard.service";
+
+type Period = "DAY" | "WEEK" | "MONTH";
 
 export default function DashboardPage() {
-  const [selectedFloor, setSelectedFloor] = useState<string | undefined>();
-  const [selected, setSelected] = useState<{
-    value: string;
-    label: string;
-    type: string;
-    id: string;
-  }>();
+  const [selectedFloorId, setSelectedFloorId] = useState<string | undefined>();
+  const [selectedPeriodTemp, setSelectedPeriodTemp] = useState<Period>("DAY");
+  const [selectedPeriodEnrg, setSelectedPeriodEnrg] = useState<Period>("DAY");
+  const [temperatureData, setTemperatureData] = useState<any[]>([]);
+  const [energyConsumption, setEnergyConsumption] = useState<any[]>([]);
+
   const [areas, setAreas] = useState<
     { value: string; label: string; type: string; id: string }[] | undefined
   >();
-
   const { data } = useGetData();
+
+  const processTemperatureData = (apiData: any[]) => {
+    if (!apiData || !Array.isArray(apiData)) return [];
+    return apiData.map((item) => ({
+      id: item.id || `temp-${Date.now()}`,
+      sensorId: item.sensorId || "default-sensor",
+      temp: item.temperature || item.temp,
+      humidity: item.humidity || 0,
+      createdAt: item.timestamp || item.createdAt || new Date().toISOString(),
+    }));
+  };
 
   useEffect(() => {
     if (data && data.length > 0) {
       setAreas(data);
-      setSelectedFloor(data[0].value);
-      setSelected(data[0]);
+      if (!selectedFloorId && data[0]) {
+        setSelectedFloorId(data[0].id);
+      }
     }
   }, [data]);
 
+  const selectedFloorData = areas?.find((area) => area.id === selectedFloorId);
+
   useEffect(() => {
-    const loadDashboardData = async () => {
-      if (selectedFloor) {
+    const loadTemperatureData = async () => {
+      if (selectedFloorId && selectedFloorData) {
         try {
-          const dashboardData = await fetchDashboardData(
-            selected?.type,
-            selected?.id,
+          const tempData = await fetchDashboardTemperatureData(
+            selectedFloorData.type,
+            selectedFloorId,
+            selectedPeriodTemp,
           );
-          console.log(dashboardData);
+
+          setTemperatureData(processTemperatureData(tempData?.data || []));
         } catch (error) {
-          console.error("Failed to fetch dashboard data:", error);
+          console.error("Failed to fetch temperature data:", error);
         }
       }
     };
 
-    loadDashboardData();
-  }, [selectedFloor]);
+    const loadEnergyData = async () => {
+      if (selectedFloorId && selectedFloorData) {
+        try {
+          const energyData = await fetchEnergyConsumationData(
+            selectedFloorData.type,
+            selectedFloorId,
+            selectedPeriodEnrg,
+          );
+
+          setEnergyConsumption(energyData?.data || []);
+        } catch (error) {
+          console.error("Failed to fetch energy consumption data:", error);
+        }
+      }
+    };
+
+    loadTemperatureData();
+    loadEnergyData();
+  }, [
+    selectedFloorId,
+    selectedFloorData,
+    selectedPeriodTemp,
+    selectedPeriodEnrg,
+  ]);
 
   return (
     <main className="flex min-h-screen flex-col p-6 w-full">
@@ -54,19 +95,39 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold">
           Intelligent Power & Security System
         </h1>
-        <FloorSelector
-          value={selectedFloor}
-          onFloorChange={setSelectedFloor}
-          className="w-full md:w-64"
-          data={areas}
-        />
+        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+          <FloorSelector
+            value={selectedFloorId}
+            onFloorChange={setSelectedFloorId}
+            className="w-full md:w-64"
+            data={areas}
+          />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <TemperatureMonitor floor={selectedFloor} />
-        <PowerConsumption floor={selectedFloor} />
-        <HVACControl floor={selectedFloor} />
-      </div>
+      {selectedFloorData ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <TemperatureMonitor
+            data={temperatureData}
+            areaId={selectedFloorData.label}
+            period={selectedPeriodTemp}
+            onChangePeriod={setSelectedPeriodTemp}
+          />
+
+          <PowerConsumption
+            data={energyConsumption}
+            period={selectedPeriodEnrg}
+            onChangePeriod={setSelectedPeriodEnrg}
+          />
+          <HVACControl floor={selectedFloorId} />
+        </div>
+      ) : (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-lg text-muted-foreground">
+            Please select a floor to view data
+          </p>
+        </div>
+      )}
     </main>
   );
 }
