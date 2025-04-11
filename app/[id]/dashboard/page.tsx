@@ -91,18 +91,18 @@ export default function DashboardPage() {
 
   return (
     <main className="flex min-h-screen flex-col p-6 w-full">
-     <ToastContainer
-      position="top-right"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-    />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">
           Intelligent Power & Security System
@@ -136,7 +136,9 @@ export default function DashboardPage() {
       ) : (
         <div className="flex justify-center items-center h-64">
           <p className="text-lg text-muted-foreground">
-            nternet connection lost. Please check your connection and try again.          </p>
+            nternet connection lost. Please check your connection and try
+            again.{" "}
+          </p>
         </div>
       )}
     </main>

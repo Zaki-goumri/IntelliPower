@@ -1,123 +1,107 @@
-"use client"
+"use client";
+"use strict";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Bell, Thermometer, Shield, Power, Check, Clock } from "lucide-react"
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Bell, Thermometer, Shield, Power, Check, Clock } from "lucide-react";
+import type { Notification } from "@/app/[id]/notifications/notifications.types";
 
-type Notification = {
-  id: string
-  type: "temperature" | "security" | "power" | "system"
-  title: string
-  message: string
-  time: string
-  read: boolean
-  severity: "low" | "medium" | "high"
-}
+export default function NotificationCenter({
+  initialNotifications,
+}: {
+  initialNotifications: any;
+}) {
 
-const initialNotifications: Notification[] = [
-  {
-    id: "1",
-    type: "temperature",
-    title: "Temperature Alert",
-    message: "Server Room 1 temperature above threshold (29.5°C)",
-    time: "15 minutes ago",
-    read: false,
-    severity: "high",
-  },
-  {
-    id: "2",
-    type: "security",
-    title: "Security Alert",
-    message: "Failed login attempt from unknown IP address",
-    time: "1 hour ago",
-    read: false,
-    severity: "medium",
-  },
-  {
-    id: "3",
-    type: "power",
-    title: "Power Consumption",
-    message: "Unusual power consumption pattern detected",
-    time: "3 hours ago",
-    read: true,
-    severity: "medium",
-  },
-  {
-    id: "4",
-    type: "system",
-    title: "System Update",
-    message: "New system update available (v2.3.4)",
-    time: "1 day ago",
-    read: true,
-    severity: "low",
-  },
-  {
-    id: "5",
-    type: "temperature",
-    title: "Temperature Normalized",
-    message: "Server Room 2 temperature returned to normal range",
-    time: "2 days ago",
-    read: true,
-    severity: "low",
-  },
-]
+  const [notifications, setNotifications] = useState<Notification[]>(
+    Array.isArray(initialNotifications) ? initialNotifications : []
+  );
 
-export default function NotificationCenter() {
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications)
-  const [activeTab, setActiveTab] = useState("all")
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (isMounted) {
+      setNotifications(initialNotifications);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [initialNotifications]);
+
+
+  const [activeTab, setActiveTab] = useState("all");
 
   const markAsRead = (id: string) => {
     setNotifications(
-      notifications.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-    )
-  }
+      notifications.map((notification) =>
+        notification.id === id ? { ...notification, read: true } : notification,
+      ),
+    );
+  };
 
   const markAllAsRead = () => {
-    setNotifications(notifications.map((notification) => ({ ...notification, read: true })))
-  }
+    setNotifications(
+      notifications.map((notification) => ({ ...notification, read: true })),
+    );
+  };
 
   const clearAll = () => {
-    setNotifications([])
-  }
+    setNotifications([]);
+  };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "temperature":
-        return <Thermometer className="h-5 w-5" />
-      case "security":
-        return <Shield className="h-5 w-5" />
-      case "power":
-        return <Power className="h-5 w-5" />
-      case "system":
-        return <Bell className="h-5 w-5" />
+      case "TEMPERATURE_ALERT":
+        return <Thermometer className="h-5 w-5" />;
+      case "SECURITY_ALERT":
+        return <Shield className="h-5 w-5" />;
+      case "POWER_USAGE_ALERT":
+        return <Power className="h-5 w-5" />;
+      case "MAINTENANCE_NOTICE":
+        return <Power className="h-5 w-5" />;
+      case "ACCESS_REQUEST":
+        return <Bell className="h-5 w-5" />;
+      case "ANOMALY_DETECTED":
+        return <Bell className="h-5 w-5" />;
       default:
-        return <Bell className="h-5 w-5" />
+        return <Bell className="h-5 w-5" />;
     }
-  }
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "high":
-        return "text-red-500"
+        return "text-red-500";
       case "medium":
-        return "text-amber-500"
+        return "text-amber-500";
       case "low":
-        return "text-green-500"
+        return "text-green-500";
       default:
-        return "text-blue-500"
+        return "text-blue-500";
     }
-  }
+  };
 
-  const filteredNotifications = notifications.filter((notification) => {
-    if (activeTab === "all") return true
-    if (activeTab === "unread") return !notification.read
-    return notification.type === activeTab
-  })
+  const filteredNotifications = (
+    Array.isArray(notifications) ? notifications : []
+  ).filter((notification) => {
+    if (activeTab === "all") return true;
+    if (activeTab === "unread") return !notification.read;
+    return notification.type === activeTab;
+  });
 
-  const unreadCount = notifications.filter((notification) => !notification.read).length
+  const unreadCount = Array.isArray(notifications)
+    ? notifications.filter((notification) => !notification.read).length
+    : 0;
 
   return (
     <Card className="h-full">
@@ -146,12 +130,15 @@ export default function NotificationCenter() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-5 mb-4">
+          <TabsList className="grid grid-cols-8 mb-4">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="unread">Unread</TabsTrigger>
-            <TabsTrigger value="temperature">Temperature</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
-            <TabsTrigger value="power">Power</TabsTrigger>
+            <TabsTrigger value="TEMPERATURE_ALERT">Temperature</TabsTrigger>
+            <TabsTrigger value="SECURITY_ALERT">Security</TabsTrigger>
+            <TabsTrigger value="POWER_USAGE_ALERT">Power</TabsTrigger>
+            <TabsTrigger value="MAINTENANCE_NOTICE">Maintenance</TabsTrigger>
+            <TabsTrigger value="ACCESS_REQUEST">Access</TabsTrigger>
+            <TabsTrigger value="ANOMALY_DETECTED">Anomaly</TabsTrigger>
           </TabsList>
 
           <TabsContent value={activeTab} className="mt-0">
@@ -163,18 +150,40 @@ export default function NotificationCenter() {
                     className={`p-4 border rounded-md ${!notification.read ? "bg-muted" : ""}`}
                   >
                     <div className="flex items-start">
-                      <div className={`mt-0.5 mr-3 ${getSeverityColor(notification.severity)}`}>
+                      <div
+                        className={`mt-0.5 mr-3 ${getSeverityColor(notification.priority || notification.severity)}`}
+                      >
                         {getNotificationIcon(notification.type)}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <div className="font-medium">{notification.title}</div>
+                          <div className="font-medium flex items-center">
+                            {notification.title}
+                            {notification.priority === "high" && (
+                              <Badge variant="destructive" className="ml-2">
+                                High Priority
+                              </Badge>
+                            )}
+                          </div>
                           <div className="flex items-center">
                             <Clock className="h-3 w-3 mr-1 text-muted-foreground" />
-                            <span className="text-xs text-muted-foreground">{notification.time}</span>
+                            <span className="text-xs text-muted-foreground">
+                              {notification.createdAt
+                                ? new Date(
+                                    notification.createdAt,
+                                  ).toLocaleString()
+                                : notification.time}
+                            </span>
                           </div>
                         </div>
                         <div className="mt-1">{notification.message}</div>
+                        {notification.relatedEntityType &&
+                          notification.relatedEntityId && (
+                            <div className="mt-1 text-xs text-muted-foreground">
+                              Related: {notification.relatedEntityType}:{" "}
+                              {notification.relatedEntityId}
+                            </div>
+                          )}
                         {!notification.read && (
                           <div className="mt-2 flex justify-end">
                             <Button
@@ -197,7 +206,8 @@ export default function NotificationCenter() {
                 <Bell className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium">No notifications</h3>
                 <p className="text-muted-foreground">
-                  You don't have any {activeTab !== "all" ? activeTab : ""} notifications at this time
+                  You don't have any {activeTab !== "all" ? activeTab : ""}{" "}
+                  notifications at this time
                 </p>
               </div>
             )}
@@ -205,5 +215,5 @@ export default function NotificationCenter() {
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }
