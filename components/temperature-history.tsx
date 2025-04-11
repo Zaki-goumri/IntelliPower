@@ -164,9 +164,8 @@ export default function TemperatureHistory({
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl">Temperature History</CardTitle>
+          <CardTitle className="text-xl">Humidity History</CardTitle>
         </div>
-        <CardDescription>Historical temperature data analysis</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs value={period} onValueChange={(value) => onChangePeriod(value as "DAY" | "WEEK" | "MONTH")}>
@@ -186,10 +185,10 @@ export default function TemperatureHistory({
               </TabsTrigger>
             </TabsList>
 
-            <Button variant="outline" size="sm" className="flex items-center">
+            {/* <Button variant="outline" size="sm" className="flex items-center">
               <Download className="h-4 w-4 mr-2" />
               Export
-            </Button>
+            </Button> */}
           </div>
 
           {loading ? (
