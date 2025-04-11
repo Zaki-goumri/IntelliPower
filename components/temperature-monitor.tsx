@@ -197,9 +197,26 @@ export default function TemperatureMonitor({
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="createdAt"
-                    tickFormatter={(time) =>
-                      new Date(time).toLocaleTimeString()
-                    }
+                    interval="preserveStartEnd"
+                    minTickGap={40}
+                    tickFormatter={(time) => {
+                      const date = new Date(time);
+                      if (period === "WEEK") {
+                        // For week view, return day name
+                        return date.toLocaleDateString(undefined, { weekday: 'short' });
+                      } else if (period === "MONTH") {
+                        // For month view, format as week indicator (MMM DD)
+                        return date.toLocaleDateString(undefined, { 
+                          month: 'short', 
+                          day: 'numeric' 
+                        });
+                      }
+                      // For day view, return just hours and minutes
+                      return date.toLocaleTimeString(undefined, { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      });
+                    }}
                   />
                   <YAxis domain={domainSettings[period]} />
                   <Tooltip

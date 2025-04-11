@@ -37,22 +37,22 @@ const timeScales = {
   DAY: {
     label: "24 Hours",
     tickKey: "hour",
-    yDomain: [100, 150],
+    yDomain: [0, 10],
     formatter: (date: Date) =>
       date.toLocaleTimeString([], { hour: "2-digit", hour12: false }),
   },
   WEEK: {
     label: "Week",
     tickKey: "day",
-    yDomain: [100, 150],
+    yDomain: [0, 10],
     formatter: (date: Date) =>
       date.toLocaleDateString([], { weekday: "short" }),
   },
   MONTH: {
     label: "Month",
-    tickKey: "week",
-    yDomain: [100, 150],
-    formatter: (date: Date) => `Week ${Math.ceil(date.getDate() / 7)}`,
+    tickKey: "date",
+    yDomain: [0, 10],
+    formatter: (date: Date) => date.getDate().toString(),
   },
 };
 
@@ -63,6 +63,7 @@ export default function PowerConsumption({
 }: PowerConsumptionProps) {
   const [currentPower, setCurrentPower] = useState(0);
   const [dailyAverage, setDailyAverage] = useState(0);
+  const [currentDate, setCurrentDate] = useState(new Date());
   // const [savings] = useState(12.5);
 
   useEffect(() => {
@@ -75,6 +76,9 @@ export default function PowerConsumption({
       const total = data.reduce((sum, entry) => sum + entry.power, 0);
       setDailyAverage(total / data.length);
     }
+
+    // Set current date
+    setCurrentDate(new Date());
   }, [data]);
 
   const processChartData = (period: keyof typeof timeScales) => {
@@ -84,14 +88,24 @@ export default function PowerConsumption({
         new Date(entry.createdAt),
       ),
       power: Number(entry.power.toFixed(2)),
+      sensorId: entry.sensorId,
+      voltage: entry.voltage,
     }));
   };
+
+  // Format the current date to show day with month
+  const formattedDate = currentDate.toLocaleDateString(undefined, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
 
   return (
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl">Power Consumption</CardTitle>
+          <div className="text-sm text-muted-foreground">{formattedDate}</div>
         </div>
         <CardDescription>Real-time power monitoring</CardDescription>
       </CardHeader>
@@ -145,6 +159,7 @@ export default function PowerConsumption({
                       "Power Consumption",
                     ]}
                     labelFormatter={(label) => `${label}`}
+                    cursor={{ fill: 'transparent' }}
                   />
                   <Bar dataKey="power" fill="#eab308" radius={[4, 4, 0, 0]} />
                 </BarChart>

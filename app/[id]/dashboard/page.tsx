@@ -4,7 +4,6 @@ import TemperatureMonitor from "@/components/temperature-monitor";
 import PowerConsumption from "@/components/power-consumption";
 import HVACControl from "@/components/hvac-control";
 import FloorSelector from "@/components/floor-selector";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useGetData from "./useGetData";
 import {
   fetchDashboardTemperatureData,
@@ -124,8 +123,7 @@ export default function DashboardPage() {
       ) : (
         <div className="flex justify-center items-center h-64">
           <p className="text-lg text-muted-foreground">
-            Please select a floor to view data
-          </p>
+            nternet connection lost. Please check your connection and try again.          </p>
         </div>
       )}
     </main>
