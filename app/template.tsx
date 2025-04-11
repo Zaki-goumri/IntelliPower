@@ -4,18 +4,19 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "@/api/axios.config";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(() => new QueryClient());
 
   useEffect(() => {
-    const sseUrl = "http://10.42.0.1:3000/notifications/";
+    const sseUrl = baseUrl + "/notifications";
 
     const eventSource = new EventSource(sseUrl);
     eventSource.addEventListener("Notification", (event) => {
       console.log("Custom notification event:", event);
       try {
-        const data = event.data
+        const data = event.data;
         console.log("Parsed custom event data:", data);
         toast.success(data || "New notification", {
           position: "top-right",
@@ -29,8 +30,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
         });
       }
     });
-    
-
   }, []);
 
   return (
