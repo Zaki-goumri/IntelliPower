@@ -16,9 +16,9 @@ import { Bell, Thermometer, Shield, Power, Check, Clock } from "lucide-react";
 import type { Notification } from "@/app/[id]/notifications/notifications.types";
 
 export default function NotificationCenter({
-  initialNotifications,
+  initialNotifications = [],
 }: {
-  initialNotifications: any;
+  initialNotifications?: Notification[];
 }) {
 
   const [notifications, setNotifications] = useState<Notification[]>(

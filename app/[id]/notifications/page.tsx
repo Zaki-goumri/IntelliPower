@@ -20,7 +20,7 @@ export default function NotificationsPage() {
 
   return (
     <main className="flex min-h-screen flex-col p-6">
-      <h1 className="text-3xl font-bold mb-6">Notifications</h1>i
+      <h1 className="text-3xl font-bold mb-6">Notifications</h1>
       <NotificationCenter initialNotifications={notifications} />
     </main>
   );
