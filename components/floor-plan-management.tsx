@@ -139,7 +139,7 @@ export function FloorPlanManagement() {
   }
   useEffect(()=>{
 function getPlan(){
-    return instance.get<FloorPlanData>("floor-plan/mock");
+    return instance.get<FloorPlanData>("/floor-plan/mock");
   }
     getPlan().then((response) => {
       console.log("Setting floor plans:")

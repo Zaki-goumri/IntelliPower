@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Shield, ShieldAlert, Camera, Lock, Unlock, Users } from "lucide-react"
+import { Shield, ShieldAlert, Camera, Lock, Unlock, Users, BrainCircuit } from "lucide-react"
+import AITrainingModule from "./ai-training-module"
 
 export default function SecurityDashboard() {
   const [securityStatus, setSecurityStatus] = useState<"armed" | "disarmed" | "breach">("armed")
@@ -109,10 +110,19 @@ export default function SecurityDashboard() {
         )}
 
         <Tabs defaultValue="cameras">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="cameras">Cameras</TabsTrigger>
             <TabsTrigger value="access">Access Points</TabsTrigger>
             <TabsTrigger value="motion">Motion Sensors</TabsTrigger>
+            <TabsTrigger value="training" className="relative">
+              <div className="flex items-center gap-2">
+                <BrainCircuit className="h-4 w-4" />
+                <span>AI Challenge</span>
+                <Badge variant="secondary" className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                  NEW
+                </Badge>
+              </div>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="cameras">
@@ -186,6 +196,10 @@ export default function SecurityDashboard() {
               </div>
               {/* Other motion sensors unchanged */}
             </div>
+          </TabsContent>
+
+          <TabsContent value="training">
+            <AITrainingModule />
           </TabsContent>
         </Tabs>
       </CardContent>

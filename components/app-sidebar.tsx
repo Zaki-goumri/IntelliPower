@@ -17,6 +17,7 @@ import {
   MapPin,
   Fan,
   Trophy,
+  Trophy,
 } from "lucide-react";
 import Logo from "@/components/logo";
 import {
