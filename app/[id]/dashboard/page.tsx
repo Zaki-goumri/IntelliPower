@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import TemperatureMonitor from "@/components/temperature-monitor";
 import PowerConsumption from "@/components/power-consumption";
-import HVACControl from "@/components/hvac-control";
 import FloorSelector from "@/components/floor-selector";
 import useGetData from "./useGetData";
 import {
@@ -118,7 +117,7 @@ export default function DashboardPage() {
       </div>
 
       {selectedFloorData ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-6">
           <TemperatureMonitor
             data={temperatureData}
             areaId={selectedFloorData.label}
@@ -131,7 +130,6 @@ export default function DashboardPage() {
             period={selectedPeriodEnrg}
             onChangePeriod={setSelectedPeriodEnrg}
           />
-          <HVACControl />
         </div>
       ) : (
         <div className="flex justify-center items-center h-64">

@@ -61,44 +61,8 @@ interface FanState {
 }
 
 
-
-//     isOn: true,
-//     speed: 2,
-//     targetTemp: 23,
-//     location: "Living Room",
-//   },
-//   {
-//     id: "fan-2",
-//     name: "Bedroom Fan",
-//     isOn: false,
-//     speed: 1,
-//     targetTemp: 22,
-//     location: "Bedroom",
-//   },
-//   {
-//     id: "fan-3",
-//     name: "Kitchen Fan",
-//     isOn: true,
-//     speed: 3,
-//     targetTemp: 24,
-//     location: "Kitchen",
-//   },
-//   {
-//     id: "fan-4",
-//     name: "Office Fan",
-//     isOn: false,
-//     speed: 2,
-//     targetTemp: 21,
-//     location: "Office",
-//   },
-// ];
-
-
-
-
 export default function FanControlPage() {
   const { data } = useGetData();
-
 
   const [areas, setAreas] = useState<
     { value: string; label: string; type: string; id: string }[] | undefined
@@ -126,11 +90,14 @@ export default function FanControlPage() {
     if (data && data.length > 0) {
       const floorData = data.map((item: any) => ({
         value: item.id,
-        label: item.name,
+        label: item.label,
         type: "floor",
         id: item.id,
       }));
       setAreas(floorData);
+      console.log(data)
+      console.log("Floor data:", floorData);
+      console.log(areas)
 
       if (!selectedFloorId && floorData[0]) {
         setSelectedFloorId(floorData[0].id);
@@ -387,18 +354,7 @@ export default function FanControlPage() {
                 </Badge>
               )}
 
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-purple-300 text-black dark:text-white hover:bg-purple-100"
-                onClick={() => {fetchAllFans(selectedFloorId??"");;}}
-                disabled={isRefreshing}
-              >
-                <RefreshCw
-                  className={`h-4 w-4 mr-1 text-black dark:text-white ${isRefreshing ? "animate-spin" : ""}`}
-                />
-                Refresh
-              </Button>
+
               <Button
                 variant="default"
                 size="sm"

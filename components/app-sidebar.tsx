@@ -16,6 +16,7 @@ import {
   Server,
   MapPin,
   Fan,
+  Trophy,
 } from "lucide-react";
 import Logo from "@/components/logo";
 import {
@@ -43,89 +44,99 @@ export function AppSidebar() {
 
   const user = useUserStore((state) => state.user);
 
-      const navItems: NavItem[] = user?.role !== undefined && user?.role === "admin" ? [
-      {
-        title: "Dashboard",
-        href: "/home/dashboard",
-        icon: <LayoutDashboard className="h-5 w-5" />,
-      },
-      {
-        title: "Temperature Control",
-        href: "/home/temperature",
-        icon: <Thermometer className="h-5 w-5" />,
-      },
-      {
-        title: "Security",
-        href: "/home/security",
-        icon: <Shield className="h-5 w-5" />,
-      },
-      {
-        title: "AI Analytics",
-        href: "/home/analytics",
-        icon: <BrainCircuit className="h-5 w-5" />,
-      },
-      {
-        title: "Data Center",
-        href: "/home/datacenter",
-        icon: <Server className="h-5 w-5" />,
-      },
-      {
-        title: "Map",
-        href: "/home/map",
-        icon: <MapPin className="h-5 w-5" />,
-      },
-      {
-        title: "User Management",
-        href: "/home/users",
-        icon: <Users className="h-5 w-5" />,
-      },
-      {
-        title: "Notifications",
-        href: "/home/notifications",
-        icon: <Bell className="h-5 w-5" />,
-      },{
-        title: "Fans",
-        href: "/home/fans",
-        icon: <Fan className="h-5 w-5" />,
-      },
-      {
-        title: "Settings",
-        href: "/home/settings",
-        icon: <Settings className="h-5 w-5" />,
-      },
-      {
-        title: "Help & Support",
-        href: "/home/help",
-        icon: <HelpCircle className="h-5 w-5" />,
-      },
-    ] : [
-      {
-        title: "Dashboard",
-        href: "/home/dashboard",
-        icon: <LayoutDashboard className="h-5 w-5" />,
-      },
-      {
-        title: "Data Center",
-        href: "/home/datacenter",
-        icon: <Server className="h-5 w-5" />,
-      },
-      {
-        title: "Notifications",
-        href: "/home/notifications",
-        icon: <Bell className="h-5 w-5" />,
-      },
-      {
-        title: "Settings",
-        href: "/home/settings",
-        icon: <Settings className="h-5 w-5" />,
-      },
-      {
-        title: "Help & Support",
-        href: "/home/help",
-        icon: <HelpCircle className="h-5 w-5" />,
-      },
-      
-    ];
+  const navItems: NavItem[] = user?.role !== undefined && user?.role === "admin" ? [
+    {
+      title: "Dashboard",
+      href: "/home/dashboard",
+      icon: <LayoutDashboard className="h-5 w-5" />,
+    },
+    {
+      title: "Temperature Control",
+      href: "/home/temperature",
+      icon: <Thermometer className="h-5 w-5" />,
+    },
+    {
+      title: "Security",
+      href: "/home/security",
+      icon: <Shield className="h-5 w-5" />,
+    },
+    {
+      title: "AI Challenge",
+      href: "/home/challenge",
+      icon: <Trophy className="h-5 w-5" />,
+    },
+    {
+      title: "AI Analytics",
+      href: "/home/analytics",
+      icon: <BrainCircuit className="h-5 w-5" />,
+    },
+    {
+      title: "Data Center",
+      href: "/home/datacenter",
+      icon: <Server className="h-5 w-5" />,
+    },
+    {
+      title: "Map",
+      href: "/home/map",
+      icon: <MapPin className="h-5 w-5" />,
+    },
+    {
+      title: "User Management",
+      href: "/home/users",
+      icon: <Users className="h-5 w-5" />,
+    },
+    {
+      title: "Notifications",
+      href: "/home/notifications",
+      icon: <Bell className="h-5 w-5" />,
+    }, {
+      title: "Fans",
+      href: "/home/fans",
+      icon: <Fan className="h-5 w-5" />,
+    },
+    {
+      title: "Settings",
+      href: "/home/settings",
+      icon: <Settings className="h-5 w-5" />,
+    },
+    {
+      title: "Help & Support",
+      href: "/home/help",
+      icon: <HelpCircle className="h-5 w-5" />,
+    },
+  ] : [
+    {
+      title: "Dashboard",
+      href: "/home/dashboard",
+      icon: <LayoutDashboard className="h-5 w-5" />,
+    },
+    {
+      title: "AI Challenge",
+      href: "/home/challenge",
+      icon: <Trophy className="h-5 w-5" />,
+    },
+    {
+      title: "Data Center",
+      href: "/home/datacenter",
+      icon: <Server className="h-5 w-5" />,
+    },
+    {
+      title: "Notifications",
+      href: "/home/notifications",
+      icon: <Bell className="h-5 w-5" />,
+    },
+    {
+      title: "Settings",
+      href: "/home/settings",
+      icon: <Settings className="h-5 w-5" />,
+    },
+    {
+      title: "Help & Support",
+      href: "/home/help",
+      icon: <HelpCircle className="h-5 w-5" />,
+    },
+
+  ];
 
   return (
     <Sidebar>
