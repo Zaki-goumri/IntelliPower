@@ -99,11 +99,6 @@ export function AppSidebar() {
       href: "/home/settings",
       icon: <Settings className="h-5 w-5" />,
     },
-    // {
-    //   title: "Help & Support",
-    //   href: "/home/help",
-    //   icon: <HelpCircle className="h-5 w-5" />,
-    // },
   ] : [
     {
       title: "Dashboard",
