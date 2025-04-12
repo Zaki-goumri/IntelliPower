@@ -64,20 +64,17 @@ export default function PowerConsumption({
   const [currentPower, setCurrentPower] = useState(0);
   const [dailyAverage, setDailyAverage] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
-  // const [savings] = useState(12.5);
 
   useEffect(() => {
     if (data.length > 0) {
-      // Set current power from latest reading
       const latest = data[data.length - 1].power;
       setCurrentPower(latest);
-
-      // Calculate daily average
       const total = data.reduce((sum, entry) => sum + entry.power, 0);
+      console.log("Total Power Consumption:", total);
       setDailyAverage(total / data.length);
+      console.log("Daily Average Power Consumption:", dailyAverage);
     }
 
-    // Set current date
     setCurrentDate(new Date());
   }, [data]);
 
