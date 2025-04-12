@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useEffect, useState } from "react"
 import { FloorPlanCanvas } from "@/components/floor-plan-canvas"
 import type { FloorPlanData } from "@/types/floor-plan.types"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,7 @@ import { PlusCircle, Building, Info, Edit, Trash2 } from "lucide-react"
 import { FloorPlanDetails } from "@/components/floor-plan-details"
 import { FloorPlanForm } from "@/components/floor-plan-form"
 import { toast } from "@/components/ui/use-toast"
+import instance from "@/api/axios.config"
 
 // Sample floor plans data
 const sampleFloorPlans: FloorPlanData[] = [
@@ -136,7 +137,18 @@ export function FloorPlanManagement() {
       variant: "destructive",
     })
   }
-
+  useEffect(()=>{
+function getPlan(){
+    return instance.get<FloorPlanData>("/floor-plan/mock");
+  }
+    getPlan().then((response) => {
+      console.log("Setting floor plans:")
+      setFloorPlans([response.data])
+    }).catch((error) => {
+      console.error("Error fetching floor plans:", error);
+    });
+   getPlan()
+  },[])
   return (
     <div className="container mx-auto space-y-6 ">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
