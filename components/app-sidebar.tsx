@@ -17,7 +17,7 @@ import {
   MapPin,
   Fan,
   Trophy,
-  Trophy,
+  Flame,
 } from "lucide-react";
 import Logo from "@/components/logo";
 import {
@@ -31,14 +31,14 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useUserStore } from "@/store/userStore";
+import { Badge } from "@/components/ui/badge";
 
 interface NavItem {
   title: string;
   href: string;
   icon: React.ReactNode;
+  badge?: React.ReactNode;
 }
-
-
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -65,6 +65,12 @@ export function AppSidebar() {
       title: "AI Challenge",
       href: "/home/challenge",
       icon: <Trophy className="h-5 w-5" />,
+      badge: (
+        <Badge variant="destructive" className="flex items-center gap-1 text-xs px-1.5 py-0.5">
+          <Flame className="h-3 w-3" />
+          HOT
+        </Badge>
+      ),
     },
     {
       title: "AI Analytics",
@@ -110,6 +116,12 @@ export function AppSidebar() {
       title: "AI Challenge",
       href: "/home/challenge",
       icon: <Trophy className="h-5 w-5" />,
+      badge: (
+        <Badge variant="destructive" className="flex items-center gap-1 text-xs px-1.5 py-0.5">
+          <Flame className="h-3 w-3" />
+          HOT
+        </Badge>
+      ),
     },
     {
       title: "Data Center",
@@ -148,9 +160,12 @@ export function AppSidebar() {
           {navItems.map((item) => (
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton asChild isActive={pathname === item.href}>
-                <Link href={item.href}>
-                  {item.icon}
-                  <span>{item.title}</span>
+                <Link href={item.href} className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-2">
+                    {item.icon}
+                    <span>{item.title}</span>
+                  </div>
+                  {item.badge}
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
