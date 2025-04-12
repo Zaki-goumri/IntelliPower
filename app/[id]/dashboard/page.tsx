@@ -131,7 +131,7 @@ export default function DashboardPage() {
             period={selectedPeriodEnrg}
             onChangePeriod={setSelectedPeriodEnrg}
           />
-          <HVACControl floor={selectedFloorId} />
+          <HVACControl />
         </div>
       ) : (
         <div className="flex justify-center items-center h-64">

@@ -89,9 +89,6 @@ export default function LandingPage() {
             <Button variant="ghost" asChild>
               <Link href="/sign-in">Sign In</Link>
             </Button>
-            <Button asChild>
-              <Link href="/sign-up">Sign Up</Link>
-            </Button>
           </div>
         </div>
       </motion.header>
@@ -114,7 +111,7 @@ export default function LandingPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <Button size="lg" asChild>
-                  <Link href="/sign-up">
+                  <Link href="/sign-in">
                     Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>

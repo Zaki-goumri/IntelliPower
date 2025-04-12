@@ -5,9 +5,11 @@ import React from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseUrl } from "@/api/axios.config";
+import { useUserStore } from "@/store/userStore";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(() => new QueryClient());
+
 
   useEffect(() => {
     const sseUrl = baseUrl + "/notifications";

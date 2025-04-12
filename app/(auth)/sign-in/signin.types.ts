@@ -1,7 +1,6 @@
 export enum UserRole {
-  ADMIN = "ADMIN",
-  EMPLOYEE = "EMPLOYEE",
-  SUPERUSER = "SUPERUSER",
+  ADMIN = "admin",
+  EMPLOYEE = "employee",
 }
 
 export type User = {

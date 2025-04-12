@@ -15,6 +15,7 @@ import {
   HelpCircle,
   Server,
   MapPin,
+  Fan,
 } from "lucide-react";
 import Logo from "@/components/logo";
 import {
@@ -35,70 +36,104 @@ interface NavItem {
   icon: React.ReactNode;
 }
 
-const navItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/home/dashboard",
-    icon: <LayoutDashboard className="h-5 w-5" />,
-  },
-  {
-    title: "Temperature Control",
-    href: "/home/temperature",
-    icon: <Thermometer className="h-5 w-5" />,
-  },
-  {
-    title: "Security",
-    href: "/home/security",
-    icon: <Shield className="h-5 w-5" />,
-  },
-  {
-    title: "AI Analytics",
-    href: "/home/analytics",
-    icon: <BrainCircuit className="h-5 w-5" />,
-  },
-  {
-    title: "Data Center",
-    href: "/home/datacenter",
-    icon: <Server className="h-5 w-5" />,
-  },
-  {
-    title: "Map",
-    href: "/home/map",
-    icon: <MapPin className="h-5 w-5" />,
-  },
-  {
-    title: "User Management",
-    href: "/home/users",
-    icon: <Users className="h-5 w-5" />,
-  },
-  {
-    title: "Notifications",
-    href: "/home/notifications",
-    icon: <Bell className="h-5 w-5" />,
-  },
-  {
-    title: "Settings",
-    href: "/home/settings",
-    icon: <Settings className="h-5 w-5" />,
-  },
-  {
-    title: "Help & Support",
-    href: "/home/help",
-    icon: <HelpCircle className="h-5 w-5" />,
-  },
-];
+
 
 export function AppSidebar() {
   const pathname = usePathname();
-  
+
   const user = useUserStore((state) => state.user);
 
+      const navItems: NavItem[] = user?.role !== undefined && user?.role === "admin" ? [
+      {
+        title: "Dashboard",
+        href: "/home/dashboard",
+        icon: <LayoutDashboard className="h-5 w-5" />,
+      },
+      {
+        title: "Temperature Control",
+        href: "/home/temperature",
+        icon: <Thermometer className="h-5 w-5" />,
+      },
+      {
+        title: "Security",
+        href: "/home/security",
+        icon: <Shield className="h-5 w-5" />,
+      },
+      {
+        title: "AI Analytics",
+        href: "/home/analytics",
+        icon: <BrainCircuit className="h-5 w-5" />,
+      },
+      {
+        title: "Data Center",
+        href: "/home/datacenter",
+        icon: <Server className="h-5 w-5" />,
+      },
+      {
+        title: "Map",
+        href: "/home/map",
+        icon: <MapPin className="h-5 w-5" />,
+      },
+      {
+        title: "User Management",
+        href: "/home/users",
+        icon: <Users className="h-5 w-5" />,
+      },
+      {
+        title: "Notifications",
+        href: "/home/notifications",
+        icon: <Bell className="h-5 w-5" />,
+      },{
+        title: "Fans",
+        href: "/home/fans",
+        icon: <Fan className="h-5 w-5" />,
+      },
+      {
+        title: "Settings",
+        href: "/home/settings",
+        icon: <Settings className="h-5 w-5" />,
+      },
+      {
+        title: "Help & Support",
+        href: "/home/help",
+        icon: <HelpCircle className="h-5 w-5" />,
+      },
+    ] : [
+      {
+        title: "Dashboard",
+        href: "/home/dashboard",
+        icon: <LayoutDashboard className="h-5 w-5" />,
+      },
+      {
+        title: "Data Center",
+        href: "/home/datacenter",
+        icon: <Server className="h-5 w-5" />,
+      },
+      {
+        title: "Notifications",
+        href: "/home/notifications",
+        icon: <Bell className="h-5 w-5" />,
+      },
+      {
+        title: "Settings",
+        href: "/home/settings",
+        icon: <Settings className="h-5 w-5" />,
+      },
+      {
+        title: "Help & Support",
+        href: "/home/help",
+        icon: <HelpCircle className="h-5 w-5" />,
+      },
+      
+    ];
 
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="p-4">
-          <Logo size="md" />
+          <Link href="/">
+            <Logo size="md" />
+          </Link>{" "}
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -122,8 +157,10 @@ export function AppSidebar() {
               AS
             </div>
             <div>
-              <p className="text-sm font-medium">{ user?.name || "User Name" }</p>
-              <p className="text-xs text-muted-foreground">{ user?.email || "user@example.com" }</p>
+              <p className="text-sm font-medium">{user?.name || "User Name"}</p>
+              <p className="text-xs text-muted-foreground">
+                {user?.email || "user@example.com"}
+              </p>
             </div>
           </div>
         </div>
