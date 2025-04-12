@@ -48,7 +48,7 @@ export default function SecurityPage() {
     <main className="flex min-h-screen flex-col p-6">
       <h1 className="text-3xl font-bold mb-6">Security Management</h1>
 
-      {isOnline && !camerasConnected ? (
+      {isOnline && camerasConnected ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <SecurityDashboard />
