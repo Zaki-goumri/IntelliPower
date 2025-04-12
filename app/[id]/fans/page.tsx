@@ -125,7 +125,7 @@ export default function FanControlPage() {
     }
   }
 
-
+const wsUrl = process.env.NEXT_PUBLIC_WS_URL || ''
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
