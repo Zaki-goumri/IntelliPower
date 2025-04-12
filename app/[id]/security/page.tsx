@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import SecurityDashboard from "@/components/security-dashboard";
 import AccessControl from "@/components/access-control";
 import AlertsLog from "@/components/alerts-log";
@@ -7,6 +7,8 @@ import AlertsLog from "@/components/alerts-log";
 export default function SecurityPage() {
   const [isOnline, setIsOnline] = useState(true);
   const [camerasConnected, setCamerasConnected] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     // Set online status initially
@@ -19,28 +21,34 @@ export default function SecurityPage() {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    // Check for connected cameras
-    const checkCameras = async () => {
+    // Initialize camera
+    const initCamera = async () => {
       try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(device => device.kind === 'videoinput');
-        setCamerasConnected(videoDevices.length > 0);
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+        setStream(mediaStream);
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+        setCamerasConnected(true);
       } catch (error) {
-        console.error("Error checking cameras:", error);
+        console.error("Error accessing camera:", error);
         setCamerasConnected(false);
       }
     };
 
-    checkCameras();
+    initCamera();
 
-    // Set up interval to periodically check camera connection
-    const cameraCheckInterval = setInterval(checkCameras, 10000); // Check every 10 seconds
-
-    // Clean up event listeners and interval
+    // Clean up
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-      clearInterval(cameraCheckInterval);
+      // Stop all tracks when component unmounts
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
     };
   }, []);
 
@@ -52,6 +60,14 @@ export default function SecurityPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <SecurityDashboard />
+            <div className="mt-4">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full rounded-lg"
+              />
+            </div>
           </div>
           <div className="space-y-6">
             <AccessControl />
@@ -61,8 +77,9 @@ export default function SecurityPage() {
       ) : (
         <div className="flex justify-center items-center h-64">
           <p className="text-lg text-muted-foreground">
-            Internet connection lost. Please check your connection and try
-            again.
+            {!isOnline 
+              ? "Internet connection lost. Please check your connection and try again."
+              : "Camera access denied. Please enable camera access and refresh the page."}
           </p>
         </div>
       )}
