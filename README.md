@@ -37,7 +37,7 @@ To run the frontend locally:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Zaki-goumri/ast.git
+git clone git@github.com:Zaki-goumri/IntelliPower.git
 cd ast
 ```
 ## 🧑‍💼 User Roles
